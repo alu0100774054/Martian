@@ -77,16 +77,16 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         x_ = evt.getX() / 40;
         y_ = evt.getY() / 40;
         if (matrix_[y_][x_] != entrada_ && matrix_[y_][x_] != salida_ && f_ == 1) {
-            if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 3) {
+            if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 1) {
                 matrix_[y_][x_] = 1;
-            } else if (evt.getButton() == evt.BUTTON3 && radioButtons_ == 3) {
+            } else if (evt.getButton() == evt.BUTTON3 && radioButtons_ == 1) {
                 matrix_[y_][x_] = 0;
-            } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 1) {
+            } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 2) {
                 matrix_[filaEntrada_][columnaEntrada_] = 0;
                 matrix_[y_][x_] = entrada_;
                 filaEntrada_ = y_;
                 columnaEntrada_ = x_;
-            } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 2) {
+            } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 3) {
                 matrix_[filaSalida_][columnaSalida_] = 0;
                 matrix_[y_][x_] = salida_;
                 filaSalida_ = y_;

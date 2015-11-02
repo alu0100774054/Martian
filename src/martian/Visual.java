@@ -21,9 +21,9 @@ public class Visual extends javax.swing.JFrame implements Runnable {
      */
     public Visual() {
         initComponents();
-        Grupo.add(robotButton);
-        Grupo.add(estacionButton);
-        Grupo.add(obstaculoButton);
+        grupo.add(robotButton);
+        grupo.add(estacionButton);
+        grupo.add(obstaculoButton);
         hilo_ = new Thread(this);
     }
 
@@ -36,6 +36,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupo = new javax.swing.ButtonGroup();
         Grupo = new javax.swing.JPanel();
         robotButton = new javax.swing.JRadioButton();
         estacionButton = new javax.swing.JRadioButton();
@@ -88,6 +89,11 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 obstaculoButtonMouseClicked(evt);
             }
         });
+        obstaculoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                obstaculoButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout GrupoLayout = new javax.swing.GroupLayout(Grupo);
         Grupo.setLayout(GrupoLayout);
@@ -104,13 +110,12 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         GrupoLayout.setVerticalGroup(
             GrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(GrupoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(robotButton)
-                .addGap(18, 18, 18)
-                .addComponent(estacionButton)
-                .addGap(18, 18, 18)
                 .addComponent(obstaculoButton)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addComponent(robotButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(estacionButton)
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
@@ -230,7 +235,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                                             .addComponent(resolverMaloButton)
                                             .addComponent(jButton3)
                                             .addComponent(jButton2))
-                                        .addGap(0, 326, Short.MAX_VALUE)))
+                                        .addGap(0, 14, Short.MAX_VALUE)))
                                 .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,20 +313,20 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void robotButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_robotButtonMouseClicked
         // TODO add your handling code here:
         if (robotButton.isSelected()) {
-            lienzo1.radioButtons_=3;
+            lienzo1.radioButtons_=2;
         }
     }//GEN-LAST:event_robotButtonMouseClicked
 
     private void estacionButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estacionButtonMouseClicked
         // TODO add your handling code here:
-        if (robotButton.isSelected()) {
-            lienzo1.radioButtons_=2;
+        if (estacionButton.isSelected()) {
+            lienzo1.radioButtons_=3;
         }
     }//GEN-LAST:event_estacionButtonMouseClicked
 
     private void obstaculoButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_obstaculoButtonMouseClicked
         // TODO add your handling code here:
-        if (robotButton.isSelected()) {
+        if (obstaculoButton.isSelected()) {
             lienzo1.radioButtons_=1;
         }
     }//GEN-LAST:event_obstaculoButtonMouseClicked
@@ -335,6 +340,10 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
         lienzo1.RandomMap();
     }//GEN-LAST:event_mapaAleatorioActionPerformed
+
+    private void obstaculoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_obstaculoButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_obstaculoButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -377,6 +386,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem acerca;
     private javax.swing.JLabel cronometro;
     private javax.swing.JRadioButton estacionButton;
+    private javax.swing.ButtonGroup grupo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
