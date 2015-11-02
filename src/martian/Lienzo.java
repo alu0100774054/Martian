@@ -5,6 +5,7 @@
  */
 package martian;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -21,19 +22,21 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     Thread hilo_;
     static int entrada_ = 3, salida_ = 4, filas_ = 10, columnas_ = 10;
     int filaEntrada_ = 3, columnaEntrada_ = 0, filaSalida_ = 8, columnaSalida_ = 9;
-    int x_ = 0, y_ = 0, termino_ = 0;
-    BufferedImage robot_, station_, obstacle_, box_, background_;
+    int x_ = 0, y_ = 0, isFinished = 0;
+    BufferedImage robot_, station_, obstacle_, box_, background_, watch_, info_;
     URL r_ = getClass().getResource("images/robot.png");
     URL s_ = getClass().getResource("images/station.png");
     URL o_ = getClass().getResource("images/obstaculo.png");
     URL bo_ = getClass().getResource("images/paquete.png");
-    URL bg_ = getClass().getResource("images/arena.jpg");
+    URL bg_ = getClass().getResource("images/arena.png");
+    URL w_ = getClass().getResource("images/cronometro.jpg");
+    URL inf_ = getClass().getResource("images/info.png");
     int f_ = 0, radioButtons_ = 0;
+    int flag_ = 5; //paint road step by step
 
     /**
      * Creates new form Lienzo
      */
-
     public Lienzo() {
         initComponents();
         restart();
@@ -48,6 +51,15 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -60,9 +72,43 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        // TODO add your handling code here:
+        x_ = evt.getX() / 40;
+        y_ = evt.getY() / 40;
+        if (matrix_[y_][x_] != entrada_ && matrix_[y_][x_] != salida_ && f_ == 1) {
+            if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 3) {
+                matrix_[y_][x_] = 1;
+            } else if (evt.getButton() == evt.BUTTON3 && radioButtons_ == 3) {
+                matrix_[y_][x_] = 0;
+            } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 1) {
+                matrix_[filaEntrada_][columnaEntrada_] = 0;
+                matrix_[y_][x_] = entrada_;
+                filaEntrada_ = y_;
+                columnaEntrada_ = x_;
+            } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 2) {
+                matrix_[filaSalida_][columnaSalida_] = 0;
+                matrix_[y_][x_] = salida_;
+                filaSalida_ = y_;
+                columnaSalida_ = x_;
+            }
+            repaint();
+        }
+    }//GEN-LAST:event_formMouseClicked
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMousePressed
+
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (solve(filaEntrada_, columnaEntrada_)) {
+            isFinished = 1;
+            JOptionPane.showMessageDialog(this, "Solución del algoritmo mas malo");
+        } else {
+            isFinished = 1;
+            JOptionPane.showMessageDialog(this, "No hay solución del algoritmo mas malo");
+        }
     }
 
     private void restart() {
@@ -80,8 +126,10 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             robot_ = ImageIO.read(r_);
             station_ = ImageIO.read(s_);
             obstacle_ = ImageIO.read(o_);
-            box_ = ImageIO.read(bo_);
+            //box_ = ImageIO.read(bo_);
             background_ = ImageIO.read(bg_);
+            //watch_ =  ImageIO.read(w_);
+            //info_ = ImageIO.read(inf_);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "No se cargo imagen, ERROR:" + e.getMessage());
         }
@@ -93,7 +141,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         filaSalida_ = 8;
         columnaSalida_ = 9;
         f_ = 1;
-        termino_ = 0;
+        isFinished = 0;
 
         repaint();
     }
@@ -164,18 +212,94 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 }
             }
         }
-    matrix_[filaSalida_][columnaSalida_] =  salida_;
-    repaint();
+        matrix_[filaSalida_][columnaSalida_] = salida_;
+        repaint();
     }
 
     @Override
     public void paint(Graphics g) {
         if (f_ >= 1) {
-            
+            g.setColor(getBackground());
+            g.fillRect(0, 0, getWidth(), getHeight());
+            for (int i = 0; i < matrix_.length; i++) {
+                for (int j = 0; j < matrix_.length; j++) {
+                    g.setColor(Color.BLACK);
+                    if (matrix_[i][j] == 0 || matrix_[i][j] == filaSalida_) { //*
+                        g.drawImage(background_, j * 40, i * 40, 40, 40, this);
+                    } else if (matrix_[i][j] == 1) {
+                        g.drawImage(obstacle_, j * 40, i * 40, 40, 40, this);
+                    } else if (matrix_[i][j] == entrada_) {
+                        g.drawImage(robot_, j * 40, i * 40, 40, 40, this);
+                    } else if (matrix_[i][j] == salida_) {
+                        g.drawImage(station_, j * 40, i * 40, 40, 40, this);
+                    } else if (matrix_[i][j] == flag_) {
+                        g.setColor(Color.BLUE);
+                        g.fillRect(j * 40, i * 40, 40, 40);
+                        g.setColor(Color.BLUE);
+                        g.drawRect(j * 40, i * 40, 40, 40);
+                    }
+                }
+            }
         }
-        super.paint(g); //To change body of generated methods, choose Tools | Templates.
+        //super.paint(g); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public boolean checkRoad(int f, int c) {
+
+        if (f < 0 || f >= filas_ || c < 0 || c >= columnas_) {
+            return false;
+        }
+        if (matrix_[f][c] == flag_ || matrix_[f][c] == 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean solve(int f, int c) {
+        boolean exit = false;
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
+        matrix_[f][c] = flag_;
+
+        if (f == filaSalida_ && c == columnaSalida_) {
+            return false;
+        }
+
+        //down
+        if (!exit && checkRoad(f + 1, c)) {
+            matrix_[f + 1][c] = entrada_;
+            repaint();
+            exit = solve(f + 1, c);
+        }
+
+        //right
+        if (!exit && checkRoad(f, c + 1)) {
+            matrix_[f][c + 1] = entrada_;
+            repaint();
+            exit = solve(f, c + 1);
+        }
+
+        //left
+        if (!exit && checkRoad(f, c - 1)) {
+            matrix_[f][c - 1] = entrada_;
+            repaint();
+            exit = solve(f, c - 1);
+        }
+
+        //up
+        if (!exit && checkRoad(f - 1, c)) {
+            matrix_[f - 1][c] = entrada_;
+            repaint();
+            exit = solve(f - 1, c);
+        }
+
+        return exit;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
