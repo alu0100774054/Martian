@@ -5,6 +5,8 @@
  */
 package martian;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author erikbv99421
@@ -19,6 +21,10 @@ public class Visual extends javax.swing.JFrame implements Runnable {
      */
     public Visual() {
         initComponents();
+        Grupo.add(robotButton);
+        Grupo.add(estacionButton);
+        Grupo.add(obstaculoButton);
+        hilo_ = new Thread(this);
     }
 
     /**
@@ -30,64 +36,80 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        Grupo = new javax.swing.JPanel();
+        robotButton = new javax.swing.JRadioButton();
+        estacionButton = new javax.swing.JRadioButton();
+        obstaculoButton = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        cronometro = new javax.swing.JLabel();
+        resolverMaloButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        lienzo2 = new martian.Lienzo();
+        lienzo1 = new martian.Lienzo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        Resolver = new javax.swing.JMenuItem();
+        mapaAleatorio = new javax.swing.JMenuItem();
+        reiniciar = new javax.swing.JMenuItem();
+        salir = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        acerca = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Herramientas"));
+        Grupo.setBorder(javax.swing.BorderFactory.createTitledBorder("Herramientas"));
 
-        jRadioButton1.setText("ROBOT");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        robotButton.setText("ROBOT");
+        robotButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                robotButtonMouseClicked(evt);
+            }
+        });
+        robotButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                robotButtonActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("PAQUETE");
+        estacionButton.setText("ESTACION");
+        estacionButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                estacionButtonMouseClicked(evt);
+            }
+        });
 
-        jRadioButton3.setText("OBSTÁCULO");
+        obstaculoButton.setText("OBSTÁCULO");
+        obstaculoButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                obstaculoButtonMouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout GrupoLayout = new javax.swing.GroupLayout(Grupo);
+        Grupo.setLayout(GrupoLayout);
+        GrupoLayout.setHorizontalGroup(
+            GrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(GrupoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton3))
+                .addGroup(GrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(estacionButton)
+                    .addComponent(robotButton)
+                    .addComponent(obstaculoButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        GrupoLayout.setVerticalGroup(
+            GrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(GrupoLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jRadioButton1)
+                .addComponent(robotButton)
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButton2)
+                .addComponent(estacionButton)
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButton3)
+                .addComponent(obstaculoButton)
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -96,70 +118,89 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/cronometro.png"))); // NOI18N
         jLabel1.setText("Tiempo");
 
-        jLabel2.setText("0 minutos : 0 segundos");
+        cronometro.setText("0'   0''");
 
-        jButton1.setText("Resolver Malo");
+        resolverMaloButton.setText("Resolver Malo");
+        resolverMaloButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resolverMaloButtonActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Resolver A*");
 
         jButton3.setText("Resolver Primero el mejor");
 
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Práctica de Inteligencia Artificial. Grado en Ingeniería Informática, Universidad de la Laguna.\n\nBienvenidos al programa de resolución de laberintos mediante algoritmos de busquedas.\nInstrucciones modo manual:\n\n\t1) Selecciona la opción que desea dibujar en el panel de herramientas, ubicado en la parte superior derecha.\n\t2) Presione el botón de resolver con el algoritmo deseado.\n\t3) Una vez finalizado puede usar la opción del menú reiniciar para reestablecer los ajustes iniciales.\n\nInstrucciones modo Aleatorio:\n\n\t1) Selecciona la opción del menú generar mapa aleatorio.\n\t2) Presione el botón de resolver con el algoritmo deseado.\n\t3) Una vez finalizado puede usar la opción del menú reiniciar para reestablecer los ajustes iniciales.");
+        jScrollPane1.setViewportView(jTextArea1);
+
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/info.png"))); // NOI18N
         jLabel3.setText("Información");
 
-        lienzo2.setBackground(new java.awt.Color(102, 51, 0));
-
-        javax.swing.GroupLayout lienzo2Layout = new javax.swing.GroupLayout(lienzo2);
-        lienzo2.setLayout(lienzo2Layout);
-        lienzo2Layout.setHorizontalGroup(
-            lienzo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout lienzo1Layout = new javax.swing.GroupLayout(lienzo1);
+        lienzo1.setLayout(lienzo1Layout);
+        lienzo1Layout.setHorizontalGroup(
+            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 402, Short.MAX_VALUE)
         );
-        lienzo2Layout.setVerticalGroup(
-            lienzo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        lienzo1Layout.setVerticalGroup(
+            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 402, Short.MAX_VALUE)
         );
 
         jMenu1.setText("Opciones");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Resolver");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        Resolver.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        Resolver.setText("Resolver");
+        Resolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                ResolverActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(Resolver);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Generar Mapa Aleatorio");
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem3.setText("Reiniciar");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        mapaAleatorio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        mapaAleatorio.setText("Generar Mapa Aleatorio");
+        mapaAleatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                mapaAleatorioActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jMenu1.add(mapaAleatorio);
 
-        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem5.setText("Salir");
-        jMenu1.add(jMenuItem5);
+        reiniciar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
+        reiniciar.setText("Reiniciar");
+        reiniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reiniciarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(reiniciar);
+
+        salir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        salir.setText("Salir");
+        salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salirActionPerformed(evt);
+            }
+        });
+        jMenu1.add(salir);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Equipo Martian");
 
-        jMenuItem4.setText("Acerca del equipo Martian");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        acerca.setText("Acerca del equipo Martian");
+        acerca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                acercaActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        jMenu2.add(acerca);
 
         jMenuBar1.add(jMenu2);
 
@@ -173,20 +214,20 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lienzo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lienzo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jLabel2)
+                                .addComponent(cronometro)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(Grupo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jButton1)
+                                            .addComponent(resolverMaloButton)
                                             .addComponent(jButton3)
                                             .addComponent(jButton2))
                                         .addGap(0, 326, Short.MAX_VALUE)))
@@ -203,18 +244,18 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Grupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(cronometro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(resolverMaloButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3))
-                    .addComponent(lienzo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lienzo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -225,21 +266,75 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void ResolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolverActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_ResolverActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void reiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reiniciarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+        lienzo1.hilo_.stop();
+        lienzo1.restart();
+        hilo_ = new Thread(this);
+        resolverMaloButton.setEnabled(true);
+        Resolver.setEnabled(true);
+        min_ = 0;
+        seg_ = 0;
+        cronometro.setText( min_ + "'   " + seg_ + "''" );
+        
+    }//GEN-LAST:event_reiniciarActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void acercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acercaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_acercaActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void robotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_robotButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+        
+    }//GEN-LAST:event_robotButtonActionPerformed
+
+    private void resolverMaloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolverMaloButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+            lienzo1.hilo_.start();
+            resolverMaloButton.setEnabled(false);
+            Resolver.setEnabled(false);
+            lienzo1.f_=2;
+            hilo_.start();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "ocurrió un error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_resolverMaloButtonActionPerformed
+
+    private void robotButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_robotButtonMouseClicked
+        // TODO add your handling code here:
+        if (robotButton.isSelected()) {
+            lienzo1.radioButtons_=3;
+        }
+    }//GEN-LAST:event_robotButtonMouseClicked
+
+    private void estacionButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estacionButtonMouseClicked
+        // TODO add your handling code here:
+        if (robotButton.isSelected()) {
+            lienzo1.radioButtons_=2;
+        }
+    }//GEN-LAST:event_estacionButtonMouseClicked
+
+    private void obstaculoButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_obstaculoButtonMouseClicked
+        // TODO add your handling code here:
+        if (robotButton.isSelected()) {
+            lienzo1.radioButtons_=1;
+        }
+    }//GEN-LAST:event_obstaculoButtonMouseClicked
+
+    private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_salirActionPerformed
+
+    private void mapaAleatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mapaAleatorioActionPerformed
+        // TODO add your handling code here:
+        lienzo1.RandomMap();
+    }//GEN-LAST:event_mapaAleatorioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,30 +372,46 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel Grupo;
+    private javax.swing.JMenuItem Resolver;
+    private javax.swing.JMenuItem acerca;
+    private javax.swing.JLabel cronometro;
+    private javax.swing.JRadioButton estacionButton;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
-    private martian.Lienzo lienzo2;
+    private javax.swing.JTextArea jTextArea1;
+    private martian.Lienzo lienzo1;
+    private javax.swing.JMenuItem mapaAleatorio;
+    private javax.swing.JRadioButton obstaculoButton;
+    private javax.swing.JMenuItem reiniciar;
+    private javax.swing.JButton resolverMaloButton;
+    private javax.swing.JRadioButton robotButton;
+    private javax.swing.JMenuItem salir;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        while (true) {            
+            try {
+                Thread.sleep(999);
+                seg_++;
+                if (seg_ >= 59) {
+                    min_++;
+                    seg_=0;
+                }
+                cronometro.setText(min_ + "'   " + seg_ + "''" );
+                if (lienzo1.isFinished == 1) {
+                    hilo_.stop();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error: " + e.getMessage());
+            }
+        }
     }
 }

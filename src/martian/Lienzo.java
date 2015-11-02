@@ -111,7 +111,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
     }
 
-    private void restart() {
+    public void restart() {
         int[][] sampleMap = {{0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
         {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
         {1, 1, 0, 1, 1, 0, 1, 0, 0, 0},

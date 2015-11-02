@@ -16,6 +16,8 @@ public class Martian {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Visual v = new Visual();
+        v.setVisible(true);
     }
     
 }
