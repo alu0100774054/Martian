@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package martian;
-
 /**
  *
  * @author erikbv99421
@@ -12,45 +11,29 @@ package martian;
 public class Nodo {
     static int costoLateral_ = 10;
     static int costoDiagonal_ =14;
-    int g_;
-    int h_;
     int f_; //f=g+h
     int x_,y_;
     boolean isVisited_;
 
-    public Nodo(int f,int c) {
+    public Nodo(int f,int c) { //nodo final
         x_=f;
         y_=c;
-        g_=0;
-        h_=0;
-        f_=g_+h_;
-        isVisited_=false;
+        Costs();
     }
-    public int get_x() {
-        return x_;
+    public Nodo(int f,int c,Nodo n) {
+        x_=f;
+        y_=c;
+        Costs();
     }
-    public int get_y() {
-        return y_;
+    private void Costs() {  //nodo final no tiene coste
+        f_=0;
     }
-    public boolean get_isVisited() {
-        return isVisited_;
+    
+    private void Costs(Nodo n) {
+        f_=(Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_)+costoLateral_;
     }
     public int get_cost() {
         return f_;
     }
-    public void set_g(boolean horizontal) {
-        if (horizontal == true)
-            g_=costoLateral_;
-        else
-            g_=costoDiagonal_;
-    }
-    public void set_h() {
-        h_=Manhattan(x_, y_);
-    }
-    public void set_f() {
-        f_=g_+h_;
-    }
-     public int Manhattan(int x, int y) {
-        return Math.abs(x_-x)*costoLateral_ + Math.abs(y_-y_)*costoLateral_;
-    }
 }
+    

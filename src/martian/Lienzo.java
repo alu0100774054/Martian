@@ -23,9 +23,16 @@ import javax.swing.JOptionPane;
 public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     int[][] matrix_;
+    
+    //Listas necesarias
     ArrayList<Nodo> listaAbierta;
     ArrayList<Nodo> listaCerrada;
     ArrayList<Nodo> listaAdyacentes;
+    
+    //nodos conocidos
+    Nodo nodoInicial;
+    Nodo nodoFinal;
+    
     Thread hilo_;
     
     //Datos del mapa por defecto
@@ -114,10 +121,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     @Override
     public void run() {
-        if (AEstrella(filaEntrada_, columnaEntrada_)) {
-            isFinished = 1;
-            JOptionPane.showMessageDialog(this, "Solución del algoritmo A*");
-        }
+        
         if (solve(filaEntrada_, columnaEntrada_)) {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "Solución del algoritmo mas malo");
@@ -160,7 +164,12 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         f_ = 1;
         isFinished = 0;
         listaAbierta = new ArrayList<>();
+        //Metemos nodo inicial
+        listaAbierta.add(nodoInicial);
         listaCerrada = new ArrayList<>();
+        nodoFinal = new Nodo(filaSalida_, columnaSalida_);
+        nodoInicial = new Nodo(filaEntrada_, columnaEntrada_, nodoFinal);
+        
         repaint();
     }
 
@@ -262,7 +271,15 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
         //super.paint(g); //To change body of generated methods, choose Tools | Templates.
     }
-
+    public int get_elem(int f, int c){
+        return matrix_[f][c];
+    }
+    public int get_fila_salida() {
+        return filaSalida_;
+    }
+    public int get_columna_salida() {
+        return columnaSalida_;
+    }
     public boolean checkRoad(int f, int c) {
 
         if (f < 0 || f >= filas_ || c < 0 || c >= columnas_) {
@@ -287,7 +304,52 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         if (f == filaSalida_ && c == columnaSalida_) {
             return true;
         }
-       
+        
+        //Sacamos el primer elemento de la lista abierta y lo metemos en la cerrada
+        Nodo nodoAux = listaAbierta.get(0);
+        
+        listaAbierta.remove(0);
+        
+        //celda de arriba
+        if(!exit && checkRoad(f+1,c))
+        {
+            Nodo nodoUP = new Nodo(f+1, c, nodoFinal);
+            listaAbierta.add(nodoUP);
+        }
+        //celda de la derecha
+        if(!exit && checkRoad(f,c+1))
+        {
+            Nodo nodoRIGHT = new Nodo(f, c+1,nodoFinal);
+            listaAbierta.add(nodoRIGHT);
+        }
+         //celda de abajo
+        if(!exit && checkRoad(f-1,c))
+        {
+            Nodo nodoDOWN = new Nodo(f-1, c, nodoFinal);
+            listaAbierta.add(nodoDOWN);
+        }
+         //celda de la izquierda
+        if(!exit && checkRoad(f,c-1))
+        {
+            Nodo nodoLEFT = new Nodo(f, c-1, nodoFinal);
+            listaAbierta.add(nodoLEFT);
+        }
+        //hay que probarlo
+        Collections.sort(listaAbierta, new Comparator<Nodo>(){
+			//@Override
+			public int compare(Nodo o1, Nodo o2) {
+				return new Integer (o1.get_cost()).compareTo(o2.get_cost());
+			}	
+	});
+        
+        //listaCerrada.add(listaAbierta.remove(0));
+        matrix_[nodoAux.x_][nodoAux.y_] = entrada_;
+       repaint();
+      
+        solve(nodoAux.x_, nodoAux.y_);
+        return exit;
+        
+       /*
         //down
         if (!exit && checkRoad(f + 1, c)) {
             matrix_[f + 1][c] = entrada_;
@@ -317,10 +379,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
 
         return exit;
-    }
-    public int get_elem(int f, int c){
-        return matrix_[f][c];
-    }
+    }*/
+    
+    /*
     public boolean checkRoadAEstrella(int f, int c, Nodo nodoActual) {
 
         if (f < 0 || f >= filas_ || c < 0 || c >= columnas_) {
@@ -352,7 +413,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         if (f == filaSalida_ && c == columnaSalida_) {
             return true;
         }
-        /*
+        
         Paso 0 Añadimos la celda origen a la lista abierta.
         Paso 1 Cogemos el primer elemento de la lista abierta y lo sacamos y lo insertamos en la lista cerrada.
         Paso 2 Cogemos las celdas adyacentes a la celda extraída.
@@ -364,7 +425,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             E) Para el resto de celdas adyacentes, les establecemos como padre la celda extraída y recalculamos factores. Después las añadimos a la lista abierta.
         Paso 4 Ordenamos la lista abierta. La lista abierta es una lista ordenada de forma ascendente en función del factor F de las celdas.
         Paso 5 Volver al paso 1.
-        */
+        
         // PASO 4
         Collections.sort(listaAbierta, new Comparator() {
            public int compare(Nodo n1, Nodo n2) {
@@ -437,6 +498,12 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
  
        return exit;
    }
+    */
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    }
 }
