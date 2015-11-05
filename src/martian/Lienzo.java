@@ -7,8 +7,12 @@ package martian;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
@@ -19,10 +23,17 @@ import javax.swing.JOptionPane;
 public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     int[][] matrix_;
+    ArrayList<Nodo> listaAbierta;
+    ArrayList<Nodo> listaCerrada;
+    ArrayList<Nodo> listaAdyacentes;
     Thread hilo_;
+    
+    //Datos del mapa por defecto
     static int entrada_ = 3, salida_ = 4, filas_ = 10, columnas_ = 10;
     int filaEntrada_ = 3, columnaEntrada_ = 0, filaSalida_ = 8, columnaSalida_ = 9;
+    
     int x_ = 0, y_ = 0, isFinished = 0;
+    //objetos gráficos
     BufferedImage robot_, station_, obstacle_, box_, background_, watch_, info_;
     URL r_ = getClass().getResource("images/robot.png");
     URL s_ = getClass().getResource("images/station.png");
@@ -34,6 +45,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     int f_ = 0, radioButtons_ = 0;
     int flag_ = 5; //paint road step by step
 
+        
     /**
      * Creates new form Lienzo
      */
@@ -102,6 +114,10 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     @Override
     public void run() {
+        if (AEstrella(filaEntrada_, columnaEntrada_)) {
+            isFinished = 1;
+            JOptionPane.showMessageDialog(this, "Solución del algoritmo A*");
+        }
         if (solve(filaEntrada_, columnaEntrada_)) {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "Solución del algoritmo mas malo");
@@ -112,7 +128,8 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     }
 
     public void restart() {
-        int[][] sampleMap = {{0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
+        int[][] sampleMap = {
+        {0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
         {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
         {1, 1, 0, 1, 1, 0, 1, 0, 0, 0},
         {entrada_, 0, 0, 0, 1, 0, 1, 0, 0, 0},
@@ -142,7 +159,8 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         columnaSalida_ = 9;
         f_ = 1;
         isFinished = 0;
-
+        listaAbierta = new ArrayList<>();
+        listaCerrada = new ArrayList<>();
         repaint();
     }
 
@@ -215,6 +233,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         matrix_[filaSalida_][columnaSalida_] = salida_;
         repaint();
     }
+       
 
     @Override
     public void paint(Graphics g) {
@@ -254,7 +273,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
         return true;
     }
-
+    
     public boolean solve(int f, int c) {
         boolean exit = false;
         try {
@@ -264,11 +283,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
 
         matrix_[f][c] = flag_;
-
+        
         if (f == filaSalida_ && c == columnaSalida_) {
-            return false;
+            return true;
         }
-
+       
         //down
         if (!exit && checkRoad(f + 1, c)) {
             matrix_[f + 1][c] = entrada_;
@@ -299,8 +318,125 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
         return exit;
     }
+    public int get_elem(int f, int c){
+        return matrix_[f][c];
+    }
+    public boolean checkRoadAEstrella(int f, int c, Nodo nodoActual) {
 
+        if (f < 0 || f >= filas_ || c < 0 || c >= columnas_) {
+            return false;
+        }
+        if (matrix_[f][c] == flag_ || matrix_[f][c] == 1) {
+            return false;
+        }
+        for (int i=0;i<listaCerrada.size();i++)
+            if (listaCerrada.get(i) == nodoActual)
+                return false;
+        for (int i=0;i<listaAbierta.size();i++)
+            if (listaAbierta.get(i) == nodoActual){
+                
+            }
+        
+        return true;
+    }
+    public boolean AEstrella(int f,int c) {
+       boolean exit = false;
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
 
+        matrix_[f][c] = flag_;
+        
+        if (f == filaSalida_ && c == columnaSalida_) {
+            return true;
+        }
+        /*
+        Paso 0 Añadimos la celda origen a la lista abierta.
+        Paso 1 Cogemos el primer elemento de la lista abierta y lo sacamos y lo insertamos en la lista cerrada.
+        Paso 2 Cogemos las celdas adyacentes a la celda extraída.
+        Paso 3 Para cada celda adyacente:
+            A) Si la celda es la celda destino, hemos terminado. Recorremos inversamente la cadena de padres hasta llegar al origen para obtener el camino.
+            B) Si la celda representa un muro o terreno infranqueable; la ignoramos.
+            C) Si la celda ya está en la lista cerrada, la ignoramos.
+            D) Si la celda ya está en la lista abierta, comprobamos si su nueva G (lo veremos más adelante) es mejor que la actual, en cuyo caso recalculamos factores (lo veremos más adelante) y ponemos como padre de la celda a la celda extraída. En caso de que no sea mejor, la ignoramos.
+            E) Para el resto de celdas adyacentes, les establecemos como padre la celda extraída y recalculamos factores. Después las añadimos a la lista abierta.
+        Paso 4 Ordenamos la lista abierta. La lista abierta es una lista ordenada de forma ascendente en función del factor F de las celdas.
+        Paso 5 Volver al paso 1.
+        */
+        // PASO 4
+        Collections.sort(listaAbierta, new Comparator() {
+           public int compare(Nodo n1, Nodo n2) {
+               return new Integer(n1.get_cost()).compareTo(new Integer(n2.get_cost()));
+           }
+
+           @Override
+           public int compare(Object o1, Object o2) {
+               throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+           }
+       });
+        
+        // PASO 1
+        Nodo nodoInicial = new Nodo(filaEntrada_, columnaEntrada_);
+        listaAbierta.add(nodoInicial);
+        
+        // PASO 2
+         Nodo nodoAux = listaAbierta.remove(0);
+        listaCerrada.add(nodoAux);
+        
+        // PASO 3
+        //up
+        if (!exit && checkRoadAEstrella(f + 1, c,nodoAux)) {
+            matrix_[f + 1][c] = entrada_;
+            repaint();
+            exit = AEstrella(f + 1, c);
+        }
+        //right
+        if (!exit && checkRoadAEstrella(f, c + 1,nodoAux)) {
+            matrix_[f][c + 1] = entrada_;
+            repaint();
+            exit = AEstrella(f, c + 1);
+        }
+        //left
+        if (!exit && checkRoadAEstrella(f, c - 1,nodoAux)) {
+            matrix_[f][c - 1] = entrada_;
+            repaint();
+            exit = AEstrella(f, c - 1);
+        }
+        //down
+        if (!exit && checkRoadAEstrella(f - 1, c,nodoAux)) {
+            matrix_[f - 1][c] = entrada_;
+            repaint();
+            exit = AEstrella(f - 1, c);
+        }
+        //up-right
+        if (!exit && checkRoadAEstrella(f + 1, c + 1,nodoAux)) {
+            matrix_[f + 1][c + 1] = entrada_;
+            repaint();
+            exit = AEstrella(f + 1, c + 1);
+        }
+        //up-left
+        if (!exit && checkRoadAEstrella(f + 1, c - 1,nodoAux)) {
+            matrix_[f + 1][c - 1] = entrada_;
+            repaint();
+            exit = AEstrella(f + 1, c - 1);
+        }
+        //down-right
+        if (!exit && checkRoadAEstrella(f - 1, c + 1,nodoAux)) {
+            matrix_[f - 1][c + 1] = entrada_;
+            repaint();
+            exit = AEstrella(f - 1, c + 1);
+        }
+        //down-left
+        if (!exit && checkRoadAEstrella(f - 1, c - 1,nodoAux)) {
+            matrix_[f - 1][c - 1] = entrada_;
+            repaint();
+            exit = AEstrella(f - 1, c - 1);
+        }
+ 
+       return exit;
+   }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
