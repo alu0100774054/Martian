@@ -13,7 +13,7 @@ public class Nodo {
     static int costoDiagonal_ =14;
     int f_; //f=g+h
     int x_,y_;
-    boolean isVisited_;
+    boolean definitivo_=false;
 
     public Nodo(int f,int c) { //nodo final
         x_=f;
@@ -34,6 +34,15 @@ public class Nodo {
     }
     public int get_cost() {
         return f_;
+    }
+    public int get_g() {
+        return f_-costoLateral_;
+    }
+    public void set_definitivo() {
+        definitivo_=true;
+    }
+    public boolean isDefinitivo() {
+        return definitivo_;
     }
 }
     
