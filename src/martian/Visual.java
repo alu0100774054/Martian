@@ -44,7 +44,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jLabel1 = new javax.swing.JLabel();
         cronometro = new javax.swing.JLabel();
         resolverMaloButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        AEstrellaButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -132,7 +132,12 @@ public class Visual extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jButton2.setText("Resolver A*");
+        AEstrellaButton.setText("Resolver A*");
+        AEstrellaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AEstrellaButtonActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Resolver Primero el mejor");
 
@@ -234,7 +239,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(resolverMaloButton)
                                             .addComponent(jButton3)
-                                            .addComponent(jButton2))
+                                            .addComponent(AEstrellaButton))
                                         .addGap(0, 14, Short.MAX_VALUE)))
                                 .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
@@ -255,7 +260,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cronometro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(AEstrellaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(resolverMaloButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -345,6 +350,19 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
     }//GEN-LAST:event_obstaculoButtonActionPerformed
 
+    private void AEstrellaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AEstrellaButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+            lienzo1.hilo_.start();
+            AEstrellaButton.setEnabled(false);
+            Resolver.setEnabled(false);
+            lienzo1.f_=2;
+            hilo_.start();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "ocurrió un error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_AEstrellaButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -381,13 +399,13 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AEstrellaButton;
     private javax.swing.JPanel Grupo;
     private javax.swing.JMenuItem Resolver;
     private javax.swing.JMenuItem acerca;
     private javax.swing.JLabel cronometro;
     private javax.swing.JRadioButton estacionButton;
     private javax.swing.ButtonGroup grupo;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
