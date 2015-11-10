@@ -165,11 +165,12 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         isFinished = 0;
         exit_ = false;
         listaAbierta = new ArrayList<>();
-        //Metemos nodo inicial
-        listaAbierta.add(nodoInicial);
         listaCerrada = new ArrayList<>();
+        //Metemos nodo inicial
         nodoFinal = new Nodo(filaSalida_, columnaSalida_);
         nodoInicial = new Nodo(filaEntrada_, columnaEntrada_, nodoFinal);
+        listaAbierta.add(nodoInicial);
+        
 
         repaint();
     }
@@ -306,7 +307,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     }
 
     public boolean checkListaCerrada(Nodo n) {
-        for (int i = 0; i < listaAbierta.size(); i++) {
+        for (int i = 0; i < listaCerrada.size(); i++) {
             Nodo aux = listaCerrada.get(i);
             if (aux == n) {
                 return true;
@@ -316,18 +317,21 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     }
 
     public Nodo MenorDeLaLista() {
-        Nodo primero = null;
-        Nodo segundo = null;
-        Nodo menor = null;
-        for (int i = 0; i < listaAbierta.size(); i++) {
-            primero = listaAbierta.get(i);
-            segundo = listaAbierta.get(i + 1);
+        int posMenor=0;
+        Nodo menor = listaAbierta.get(posMenor);
+
+        for (int i = 0; i < listaAbierta.size()-1; i++) {
+            Nodo primero = listaAbierta.get(i);
+            Nodo segundo = listaAbierta.get(i + 1);
             if ((primero.get_cost() <= segundo.get_cost()) && (primero.get_cost() < menor.get_cost())) {
                 menor = primero;
+                posMenor = i;
             } else if ((primero.get_cost() > segundo.get_cost()) && (segundo.get_cost() < menor.get_cost())) {
                 menor = segundo;
+                posMenor = i;
             }
         }
+        listaAbierta.remove(posMenor);
         return menor;
     }
     private void EvaluarAdyacente(int f,int c) {
@@ -339,9 +343,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             }
         }   
     }
-    private void CambiarPadre() {
-        
-    }
+
     public boolean solve() {
         try {
             Thread.sleep(200);
@@ -350,11 +352,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
 
         while (!listaAbierta.isEmpty()) {
-            Nodo aux = MenorDeLaLista();
-            listaCerrada.add(aux);
-            matrix_[aux.x_][aux.y_] = entrada_;
-            matrix_[aux.x_][aux.y_] = flag_;
-            repaint();
+            
             //celda de arriba
             EvaluarAdyacente(filaEntrada_-1, columnaEntrada_);
             //celda de la derecha
@@ -364,19 +362,24 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             //celda de la izquierda
             EvaluarAdyacente(filaEntrada_, columnaEntrada_-1);
             
+            Nodo aux = MenorDeLaLista();
+            listaCerrada.add(aux);
+            matrix_[aux.x_][aux.y_] = entrada_;
+            matrix_[aux.x_][aux.y_] = flag_;
+            repaint();
         }
 
         /*
         En caso de que LA se encuentre vacía y no seha llegado a la 
         salida del laberinto, entoncesno existe camino posible.
          */
-        if (filaEntrada_ == filaSalida_ && columnaEntrada_ == columnaSalida_) {
+        /*if (filaEntrada_ == filaSalida_ && columnaEntrada_ == columnaSalida_) {
             JOptionPane.showMessageDialog(this, "El laberinto tiene solucion");
             exit_ = true;
         } else {
             JOptionPane.showMessageDialog(this, "El laberinto NO tiene solucion");
             exit_ = false;
-        }
+        }*/
         return exit_;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

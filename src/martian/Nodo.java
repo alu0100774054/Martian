@@ -23,14 +23,16 @@ public class Nodo {
     public Nodo(int f,int c,Nodo n) {
         x_=f;
         y_=c;
-        Costs();
+        Costs(n);
     }
     private void Costs() {  //nodo final no tiene coste
         f_=0;
     }
     
     private void Costs(Nodo n) {
+        System.out.println("martian.Nodo.Costs()"+ n.x_ +n.y_);
         f_=(Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_)+costoLateral_;
+        System.out.println("martian.Nodo.Costs()"+f_);
     }
     public int get_cost() {
         return f_;
