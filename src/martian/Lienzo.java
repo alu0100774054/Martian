@@ -351,7 +351,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
-        while (filaEntrada_!=filaSalida_ && columnaEntrada_!=columnaSalida_) {
+        while (!listaAbierta.isEmpty()) {
             
             //celda de arriba
             EvaluarAdyacente(filaEntrada_-1, columnaEntrada_);
