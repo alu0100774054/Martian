@@ -137,7 +137,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
             {1, 1, 0, 1, 1, 0, 1, 0, 0, 0},
             {entrada_, 0, 0, 0, 1, 0, 1, 0, 0, 0},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {1, 0, 1, 0, 1, 0, 1, 0, 0, 0},
             {1, 0, 1, 1, 0, 0, 1, 0, 1, 0},
             {1, 0, 0, 0, 0, 1, 1, 0, 1, 1},
@@ -351,7 +351,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
-        while (!listaAbierta.isEmpty()) {
+        while (filaEntrada_!=filaSalida_ && columnaEntrada_!=columnaSalida_) {
             
             //celda de arriba
             EvaluarAdyacente(filaEntrada_-1, columnaEntrada_);
@@ -364,6 +364,8 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             
             Nodo aux = MenorDeLaLista();
             listaCerrada.add(aux);
+            filaEntrada_=aux.x_;
+            columnaEntrada_=aux.y_;
             matrix_[aux.x_][aux.y_] = entrada_;
             matrix_[aux.x_][aux.y_] = flag_;
             repaint();
