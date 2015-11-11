@@ -49,7 +49,6 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        lienzo1 = new martian.Lienzo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Resolver = new javax.swing.JMenuItem();
@@ -115,15 +114,19 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 .addComponent(robotButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(estacionButton)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getContentPane().add(Grupo, java.awt.BorderLayout.CENTER);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/cronometro.png"))); // NOI18N
         jLabel1.setText("Tiempo");
+        getContentPane().add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         cronometro.setText("0'   0''");
+        getContentPane().add(cronometro, java.awt.BorderLayout.PAGE_END);
 
         resolverMaloButton.setText("Resolver Malo");
         resolverMaloButton.addActionListener(new java.awt.event.ActionListener() {
@@ -131,6 +134,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 resolverMaloButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(resolverMaloButton, java.awt.BorderLayout.LINE_END);
 
         AEstrellaButton.setText("Resolver A*");
         AEstrellaButton.addActionListener(new java.awt.event.ActionListener() {
@@ -138,8 +142,15 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 AEstrellaButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(AEstrellaButton, java.awt.BorderLayout.LINE_START);
 
         jButton3.setText("Resolver Primero el mejor");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, java.awt.BorderLayout.CENTER);
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
@@ -147,23 +158,12 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jTextArea1.setText("Práctica de Inteligencia Artificial. Grado en Ingeniería Informática, Universidad de la Laguna.\n\nBienvenidos al programa de resolución de laberintos mediante algoritmos de busquedas.\nInstrucciones modo manual:\n\n\t1) Selecciona la opción que desea dibujar en el panel de herramientas, ubicado en la parte superior derecha.\n\t2) Presione el botón de resolver con el algoritmo deseado.\n\t3) Una vez finalizado puede usar la opción del menú reiniciar para reestablecer los ajustes iniciales.\n\nInstrucciones modo Aleatorio:\n\n\t1) Selecciona la opción del menú generar mapa aleatorio.\n\t2) Presione el botón de resolver con el algoritmo deseado.\n\t3) Una vez finalizado puede usar la opción del menú reiniciar para reestablecer los ajustes iniciales.");
         jScrollPane1.setViewportView(jTextArea1);
 
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/info.png"))); // NOI18N
         jLabel3.setText("Información");
-
-        lienzo1.setAutoscrolls(true);
-        lienzo1.setPreferredSize(new java.awt.Dimension(400, 400));
-
-        javax.swing.GroupLayout lienzo1Layout = new javax.swing.GroupLayout(lienzo1);
-        lienzo1.setLayout(lienzo1Layout);
-        lienzo1Layout.setHorizontalGroup(
-            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        lienzo1Layout.setVerticalGroup(
-            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
+        getContentPane().add(jLabel3, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Opciones");
 
@@ -219,63 +219,6 @@ public class Visual extends javax.swing.JFrame implements Runnable {
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lienzo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(cronometro)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Grupo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(resolverMaloButton)
-                                            .addComponent(jButton3)
-                                            .addComponent(AEstrellaButton))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(Grupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cronometro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AEstrellaButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(resolverMaloButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
-                    .addComponent(lienzo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -286,14 +229,14 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void reiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reiniciarActionPerformed
         // TODO add your handling code here:
         lienzo1.hilo_.stop();
-        lienzo1.restart(0,0,0);
+        lienzo1.restart(0, 0, 0);
         hilo_ = new Thread(this);
         resolverMaloButton.setEnabled(true);
         Resolver.setEnabled(true);
         min_ = 0;
         seg_ = 0;
-        cronometro.setText( min_ + "'   " + seg_ + "''" );
-        
+        cronometro.setText(min_ + "'   " + seg_ + "''");
+
     }//GEN-LAST:event_reiniciarActionPerformed
 
     private void acercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acercaActionPerformed
@@ -302,7 +245,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
 
     private void robotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_robotButtonActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_robotButtonActionPerformed
 
     private void resolverMaloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolverMaloButtonActionPerformed
@@ -311,7 +254,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
             lienzo1.hilo_.start();
             resolverMaloButton.setEnabled(false);
             Resolver.setEnabled(false);
-            lienzo1.f_=2;
+            lienzo1.f_ = 2;
             hilo_.start();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "ocurrió un error: " + e.getMessage());
@@ -321,21 +264,21 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void robotButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_robotButtonMouseClicked
         // TODO add your handling code here:
         if (robotButton.isSelected()) {
-            lienzo1.radioButtons_=2;
+            lienzo1.radioButtons_ = 2;
         }
     }//GEN-LAST:event_robotButtonMouseClicked
 
     private void estacionButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estacionButtonMouseClicked
         // TODO add your handling code here:
         if (estacionButton.isSelected()) {
-            lienzo1.radioButtons_=3;
+            lienzo1.radioButtons_ = 3;
         }
     }//GEN-LAST:event_estacionButtonMouseClicked
 
     private void obstaculoButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_obstaculoButtonMouseClicked
         // TODO add your handling code here:
         if (obstaculoButton.isSelected()) {
-            lienzo1.radioButtons_=1;
+            lienzo1.radioButtons_ = 1;
         }
     }//GEN-LAST:event_obstaculoButtonMouseClicked
 
@@ -359,12 +302,16 @@ public class Visual extends javax.swing.JFrame implements Runnable {
             lienzo1.hilo_.start();
             AEstrellaButton.setEnabled(false);
             Resolver.setEnabled(false);
-            lienzo1.f_=2;
+            lienzo1.f_ = 2;
             hilo_.start();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "ocurrió un error: " + e.getMessage());
         }
     }//GEN-LAST:event_AEstrellaButtonActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -417,7 +364,6 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private martian.Lienzo lienzo1;
     private javax.swing.JMenuItem mapaAleatorio;
     private javax.swing.JRadioButton obstaculoButton;
     private javax.swing.JMenuItem reiniciar;
@@ -428,15 +374,15 @@ public class Visual extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
-        while (true) {            
+        while (true) {
             try {
                 Thread.sleep(999);
                 seg_++;
                 if (seg_ >= 59) {
                     min_++;
-                    seg_=0;
+                    seg_ = 0;
                 }
-                cronometro.setText(min_ + "'   " + seg_ + "''" );
+                cronometro.setText(min_ + "'   " + seg_ + "''");
                 if (lienzo1.isFinished == 1) {
                     hilo_.stop();
                 }
