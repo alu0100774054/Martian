@@ -357,11 +357,13 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     public Nodo MenorDeLaLista() {
         Nodo aux, aux2;
+        int elementoABorrar = 0;
         Nodo menor = listaAbierta.get(0);
         if (listaAbierta.size() == 0) {
             JOptionPane.showMessageDialog(this, "lista abierta vacia");
         }
         if (listaAbierta.size() == 1) {
+            listaAbierta.remove(0);
             return menor;
         } else {
             for (int i = 0; i < listaAbierta.size() - 1; i++) {
@@ -372,17 +374,21 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 aux2 = listaAbierta.get(i + 1);
                 if (aux.get_cost() < aux2.get_cost() && aux.get_cost() < menor.get_cost()) {
                     menor = aux;
+                    elementoABorrar = i;
                 }
                 if (aux2.get_cost() < aux.get_cost() && aux2.get_cost() < menor.get_cost()) {
                     menor = aux2;
+                    elementoABorrar = i;
                 }
             }
+            listaAbierta.remove(elementoABorrar);
         }
         return menor;
     }
 
     private void EvaluarAdyacente(int f, int c, Nodo padre) {
         if (checkRoad(f, c)) {
+            //JOptionPane.showMessageDialog(this, "se evalua el nodo `["+f+"]["+c+"]");
             Nodo sucesor = new Nodo(f, c, nodoFinal);
             sucesor.set_padre(padre.x_, padre.y_);
             /*Comprobar los casos posibles
@@ -428,14 +434,14 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
         boolean solucionE_ = false, fallo_ = false;
-        while (solucionE_) {
+        while (solucionE_ != true) {
             if (listaAbierta.isEmpty()) {
 
                 return fallo_;
             }
             Nodo actual = MenorDeLaLista();
             listaCerrada.add(actual);
-
+            matrix_[actual.x_][actual.y_] = entrada_;
             if (actual.x_ == nodoFinal.x_ && actual.y_ == nodoFinal.y_) {
                 solucionE_ = true;
                 return solucionE_;
