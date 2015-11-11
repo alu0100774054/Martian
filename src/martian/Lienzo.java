@@ -338,6 +338,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     public boolean checkListaAbierta(Nodo n) {
         for (int i = 0; i < listaAbierta.size()-1; i++) {
             Nodo aux = listaAbierta.get(i);
+            System.out.println("Dentro CkcLA");
+            System.out.println("Buscando en LA  "+ n.x_ +"  "+n.y_);
+            System.out.println("Elemento en LA  "+ aux.x_ +"  "+aux.y_);
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
@@ -348,6 +351,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     public boolean checkListaCerrada(Nodo n) {
         for (int i = 0; i < listaCerrada.size()-1; i++) {
             Nodo aux = listaCerrada.get(i);
+            System.out.println("Dentro CkcLC");
+            System.out.println("Buscando en LC  "+ n.x_ +"  "+n.y_);
+            System.out.println("Elemento en LC  "+ aux.x_ +"  "+aux.y_);
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
@@ -381,6 +387,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                     elementoABorrar = i;
                 }
             }
+            System.out.println("borrando elemento LA[" +elementoABorrar+"] = " +menor.x_ + " " + menor.y_);
             listaAbierta.remove(elementoABorrar);
         }
         return menor;
@@ -388,8 +395,10 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     private void EvaluarAdyacente(int f, int c, Nodo padre) {
         if (checkRoad(f, c)) {
-            //JOptionPane.showMessageDialog(this, "se evalua el nodo `["+f+"]["+c+"]");
+            JOptionPane.showMessageDialog(this, "se evalua el nodo `["+f+"]["+c+"]");
             Nodo sucesor = new Nodo(f, c, nodoFinal);
+            System.out.println("padre  "+ padre.x_ +"  "+padre.y_);
+            System.out.println("sucesor  "+ sucesor.x_ +"  "+sucesor.y_);
             sucesor.set_padre(padre.x_, padre.y_);
             /*Comprobar los casos posibles
              1) adyacente y padre estan en listaCerrada
@@ -397,21 +406,22 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
              3) adyacente y padre no estan ni en listaAbierta ni listaCerrada
              */
             if (checkListaCerrada(sucesor) && checkListaCerrada(padre)) {
-                if (sucesor.get_cost() < padre.get_cost()) {
-                    actualizar(padre);
+                if (sucesor.get_cost() <= padre.get_cost()) {
+                    actualizarCerrada(padre);
                 } else {
-                    actualizar(sucesor);
+                    actualizarCerrada(sucesor);
                 }
             }
-            if (checkListaAbierta(sucesor) && checkListaAbierta(padre)) {
-                if (sucesor.get_cost() < padre.get_cost()) {
-                    actualizar(padre);
+            else if (checkListaAbierta(sucesor) && checkListaAbierta(padre)) {
+                if (sucesor.get_cost() <= padre.get_cost()) {
+                    actualizarAbierta(padre);
                 } else {
-                    actualizar(sucesor);
+                    actualizarAbierta(sucesor);
                 }
             }
-            if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre))) {
+            else if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre))) {
                 listaAbierta.add(sucesor);
+                 System.out.println("se mete en la LA el sucesor  " + sucesor.x_+ "  "+sucesor.y_);
             }
         }
 
@@ -439,9 +449,13 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
                 return fallo_;
             }
+            //Nodo camino = MenorDeLaLista();
             Nodo actual = MenorDeLaLista();
+            
             listaCerrada.add(actual);
+            System.out.println("se mete en la LC  " + actual.x_+ "  "+actual.y_);
             matrix_[actual.x_][actual.y_] = entrada_;
+            matrix_[actual.x_][actual.y_] = flag_;
             if (actual.x_ == nodoFinal.x_ && actual.y_ == nodoFinal.y_) {
                 solucionE_ = true;
                 return solucionE_;
@@ -471,12 +485,22 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         return solucionE_;
     }
 
-    private void actualizar(Nodo nodoAEliminar) {
+    private void actualizarCerrada(Nodo nodoAEliminar) {
         Nodo aux;
         for (int i = 0; i < listaCerrada.size(); i++) {
             aux = listaCerrada.get(i);
             if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_) {
                 listaCerrada.remove(i);
+            }
+        }
+    }
+    
+    private void actualizarAbierta(Nodo nodoAEliminar) {
+        Nodo aux;
+        for (int i = 0; i < listaAbierta.size(); i++) {
+            aux = listaAbierta.get(i);
+            if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_) {
+                listaAbierta.remove(i);
             }
         }
     }
