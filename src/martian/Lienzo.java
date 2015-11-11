@@ -28,6 +28,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     ArrayList<Nodo> listaAbierta;
     ArrayList<Nodo> listaCerrada;
     ArrayList<Nodo> listaAdyacentes;
+    ArrayList<Nodo> listaVisitados;
 
     //nodos conocidos
     Nodo nodoInicial;
@@ -204,6 +205,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
         listaAbierta = new ArrayList<>();
         listaCerrada = new ArrayList<>();
+        listaVisitados = new ArrayList<>();
         //Metemos nodo inicial
         nodoFinal = new Nodo(filaSalida_, columnaSalida_);
         nodoInicial = new Nodo(filaEntrada_, columnaEntrada_, nodoFinal);
@@ -334,59 +336,79 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     }
 
     public boolean checkListaAbierta(Nodo n) {
-        for (int i = 0; i < listaAbierta.size(); i++) {
+        for (int i = 0; i < listaAbierta.size()-1; i++) {
             Nodo aux = listaAbierta.get(i);
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
         }
-        return false;
+        return false;        
     }
 
     public boolean checkListaCerrada(Nodo n) {
-        for (int i = 0; i < listaCerrada.size(); i++) {
+        for (int i = 0; i < listaCerrada.size()-1; i++) {
             Nodo aux = listaCerrada.get(i);
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
         }
-        return false;
+        return false;        
     }
 
     public Nodo MenorDeLaLista() {
-        int posMenor = 0;
-        Nodo menor = listaAbierta.get(posMenor);
-
-        for (int i = 0; i < listaAbierta.size() - 1; i++) {
-            Nodo primero = listaAbierta.get(i);
-            Nodo segundo = listaAbierta.get(i + 1);
-            if ((primero.get_cost() <= segundo.get_cost()) && (primero.get_cost() < menor.get_cost())) {
-                menor = primero;
-                posMenor = i;
-            } else if ((primero.get_cost() > segundo.get_cost()) && (segundo.get_cost() < menor.get_cost())) {
-                menor = segundo;
-                posMenor = i;
+        Nodo aux, aux2;
+        Nodo menor = listaAbierta.get(0);
+        if (listaAbierta.size() == 0) {
+            JOptionPane.showMessageDialog(this, "lista abierta vacia");
+        }
+        if (listaAbierta.size() == 1) {
+            return menor;
+        } else {
+            for (int i = 0; i < listaAbierta.size() - 1; i++) {
+                if (i + 1 > listaAbierta.size()) {
+                    JOptionPane.showMessageDialog(this, "desbordamiento de lista abierta por el final.");
+                }
+                aux = listaAbierta.get(i);
+                aux2 = listaAbierta.get(i + 1);
+                if (aux.get_cost() < aux2.get_cost() && aux.get_cost() < menor.get_cost()) {
+                    menor = aux;
+                }
+                if (aux2.get_cost() < aux.get_cost() && aux2.get_cost() < menor.get_cost()) {
+                    menor = aux2;
+                }
             }
         }
-        listaAbierta.remove(posMenor);
         return menor;
     }
 
     private void EvaluarAdyacente(int f, int c, Nodo padre) {
-
         if (checkRoad(f, c)) {
-            Nodo adyacente = new Nodo(f, c, nodoFinal);
-            adyacente.set_padre(padre.x_, padre.y_);
-            if (!checkListaAbierta(adyacente) && !checkListaCerrada(adyacente)) {
-                listaAbierta.add(adyacente);
-            }
-            if (checkListaAbierta(adyacente)) {
-                if (adyacente.get_cost() < padre.get_cost()) {
-                    //listaAbierta.add(adyacente);
-                    changePadre(adyacente, padre);
+            Nodo sucesor = new Nodo(f, c, nodoFinal);
+            sucesor.set_padre(padre.x_, padre.y_);
+            /*Comprobar los casos posibles
+             1) adyacente y padre estan en listaCerrada
+             2) adyacente y padre estan en listaAbierta
+             3) adyacente y padre no estan ni en listaAbierta ni listaCerrada
+             */
+            if (checkListaCerrada(sucesor) && checkListaCerrada(padre)) {
+                if (sucesor.get_cost() < padre.get_cost()) {
+                    actualizar(padre);
+                } else {
+                    actualizar(sucesor);
                 }
             }
+            if (checkListaAbierta(sucesor) && checkListaAbierta(padre)) {
+                if (sucesor.get_cost() < padre.get_cost()) {
+                    actualizar(padre);
+                } else {
+                    actualizar(sucesor);
+                }
+            }
+            if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre))) {
+                listaAbierta.add(sucesor);
+            }
         }
+
     }
 
     private void changePadre(Nodo adyacente, Nodo padre) {
@@ -405,44 +427,52 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+        boolean solucionE_ = false, fallo_ = false;
+        while (solucionE_) {
+            if (listaAbierta.isEmpty()) {
 
-        while (listaAbierta.size() > 0) {
-            
-            Nodo actual = new Nodo(filaEntrada_, columnaEntrada_, nodoFinal);
-            //celda de arriba
-            EvaluarAdyacente(filaEntrada_ - 1, columnaEntrada_, actual);
-            //celda de la derecha
-            EvaluarAdyacente(filaEntrada_, columnaEntrada_ + 1, actual);
-            //celda de abajo
-            EvaluarAdyacente(filaEntrada_ + 1, columnaEntrada_, actual);
-            //celda de la izquierda
-            EvaluarAdyacente(filaEntrada_, columnaEntrada_ - 1, actual);
+                return fallo_;
+            }
+            Nodo actual = MenorDeLaLista();
+            listaCerrada.add(actual);
 
-            Nodo aux = MenorDeLaLista();
-            listaCerrada.add(aux);
-            filaEntrada_ = aux.x_;
-            columnaEntrada_ = aux.y_;
+            if (actual.x_ == nodoFinal.x_ && actual.y_ == nodoFinal.y_) {
+                solucionE_ = true;
+                return solucionE_;
+            } else {
+                //celda arriba
+                EvaluarAdyacente(actual.x_ - 1, actual.y_, actual);
+                //celda derecha
+                EvaluarAdyacente(actual.x_, actual.y_ + 1, actual);
+                //celda abajo
+                EvaluarAdyacente(actual.x_ + 1, actual.y_, actual);
+                //celda izquierda
+                EvaluarAdyacente(actual.x_, actual.y_ - 1, actual);
+                repaint();
 
-            matrix_[aux.x_][aux.y_] = entrada_;
+            }
+        }
+        Nodo aux;
+        //imprimir camino solución
+        for (int i =listaCerrada.size()-1; i>=0;i--) {
+            aux = listaCerrada.get(i);
             matrix_[aux.x_][aux.y_] = flag_;
             repaint();
         }
 
-        /*
-        En caso de que LA se encuentre vacía y no seha llegado a la 
-        salida del laberinto, entoncesno existe camino posible.
-         */
-        if (filaEntrada_ == filaSalida_ && columnaEntrada_ == columnaSalida_) {
-            JOptionPane.showMessageDialog(this, "El laberinto tiene solucion");
-            exit_ = true;
-        } else {
-            JOptionPane.showMessageDialog(this, "El laberinto NO tiene solucion");
-            exit_ = false;
-        }
-        repaint();
-        return exit_;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+        return solucionE_;
+    }
+
+    private void actualizar(Nodo nodoAEliminar) {
+        Nodo aux;
+        for (int i = 0; i < listaCerrada.size(); i++) {
+            aux = listaCerrada.get(i);
+            if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_) {
+                listaCerrada.remove(i);
+            }
+        }
     }
 
     private void RandomMap(int nObstaculos) {
