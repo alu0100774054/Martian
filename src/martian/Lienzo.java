@@ -384,18 +384,19 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 }
                 if (aux2.get_cost() < aux.get_cost() && aux2.get_cost() < menor.get_cost()) {
                     menor = aux2;
-                    elementoABorrar = i;
+                    elementoABorrar = i+1;
                 }
             }
             System.out.println("borrando elemento LA[" +elementoABorrar+"] = " +menor.x_ + " " + menor.y_);
             listaAbierta.remove(elementoABorrar);
+            System.out.println("Envindo menor de LA = " +menor.x_ + " " + menor.y_);
         }
         return menor;
     }
 
     private void EvaluarAdyacente(int f, int c, Nodo padre) {
         if (checkRoad(f, c)) {
-            JOptionPane.showMessageDialog(this, "se evalua el nodo `["+f+"]["+c+"]");
+            //JOptionPane.showMessageDialog(this, "se evalua el nodo `["+f+"]["+c+"]");
             Nodo sucesor = new Nodo(f, c, nodoFinal);
             System.out.println("padre  "+ padre.x_ +"  "+padre.y_);
             System.out.println("sucesor  "+ sucesor.x_ +"  "+sucesor.y_);
