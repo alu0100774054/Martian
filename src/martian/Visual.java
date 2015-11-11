@@ -24,6 +24,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         grupo.add(robotButton);
         grupo.add(estacionButton);
         grupo.add(obstaculoButton);
+        acercaJF.pack();
         hilo_ = new Thread(this);
     }
 
@@ -37,6 +38,13 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void initComponents() {
 
         grupo = new javax.swing.ButtonGroup();
+        acercaJF = new javax.swing.JFrame();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        cerrarAbout = new javax.swing.JButton();
+        jFrame1 = new javax.swing.JFrame();
+        jLabel4 = new javax.swing.JLabel();
         Grupo = new javax.swing.JPanel();
         robotButton = new javax.swing.JRadioButton();
         estacionButton = new javax.swing.JRadioButton();
@@ -49,6 +57,15 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        columnas_ = new javax.swing.JTextField();
+        filas_ = new javax.swing.JTextField();
+        generarMatrix_ = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        porce_ = new javax.swing.JTextField();
+        lienzo1 = new martian.Lienzo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Resolver = new javax.swing.JMenuItem();
@@ -57,6 +74,63 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         salir = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         acerca = new javax.swing.JMenuItem();
+
+        jLabel2.setText("Acerca de la práctica");
+
+        jTextArea2.setEditable(false);
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jTextArea2.setText("Práctica de Inteligencia Artificial\nIngeniería Informática\nUniversidad de la Laguna\nTenerife - España\nIntegrantes:\nErik Barreto de Vera\nJosé Joaquín Escobar Góimez");
+        jScrollPane2.setViewportView(jTextArea2);
+
+        cerrarAbout.setText("Cerrar");
+        cerrarAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarAboutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout acercaJFLayout = new javax.swing.GroupLayout(acercaJF.getContentPane());
+        acercaJF.getContentPane().setLayout(acercaJFLayout);
+        acercaJFLayout.setHorizontalGroup(
+            acercaJFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(acercaJFLayout.createSequentialGroup()
+                .addGroup(acercaJFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(acercaJFLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel2))
+                    .addGroup(acercaJFLayout.createSequentialGroup()
+                        .addGap(294, 294, 294)
+                        .addComponent(cerrarAbout))
+                    .addGroup(acercaJFLayout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+        acercaJFLayout.setVerticalGroup(
+            acercaJFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(acercaJFLayout.createSequentialGroup()
+                .addGap(220, 220, 220)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(cerrarAbout)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -113,20 +187,15 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 .addGap(12, 12, 12)
                 .addComponent(robotButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(estacionButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(estacionButton))
         );
-
-        getContentPane().add(Grupo, java.awt.BorderLayout.CENTER);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/cronometro.png"))); // NOI18N
         jLabel1.setText("Tiempo");
-        getContentPane().add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         cronometro.setText("0'   0''");
-        getContentPane().add(cronometro, java.awt.BorderLayout.PAGE_END);
 
         resolverMaloButton.setText("Resolver Malo");
         resolverMaloButton.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +203,6 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 resolverMaloButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(resolverMaloButton, java.awt.BorderLayout.LINE_END);
 
         AEstrellaButton.setText("Resolver A*");
         AEstrellaButton.addActionListener(new java.awt.event.ActionListener() {
@@ -142,7 +210,6 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 AEstrellaButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(AEstrellaButton, java.awt.BorderLayout.LINE_START);
 
         jButton3.setText("Resolver Primero el mejor");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -150,7 +217,6 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, java.awt.BorderLayout.CENTER);
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
@@ -158,12 +224,89 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jTextArea1.setText("Práctica de Inteligencia Artificial. Grado en Ingeniería Informática, Universidad de la Laguna.\n\nBienvenidos al programa de resolución de laberintos mediante algoritmos de busquedas.\nInstrucciones modo manual:\n\n\t1) Selecciona la opción que desea dibujar en el panel de herramientas, ubicado en la parte superior derecha.\n\t2) Presione el botón de resolver con el algoritmo deseado.\n\t3) Una vez finalizado puede usar la opción del menú reiniciar para reestablecer los ajustes iniciales.\n\nInstrucciones modo Aleatorio:\n\n\t1) Selecciona la opción del menú generar mapa aleatorio.\n\t2) Presione el botón de resolver con el algoritmo deseado.\n\t3) Una vez finalizado puede usar la opción del menú reiniciar para reestablecer los ajustes iniciales.");
         jScrollPane1.setViewportView(jTextArea1);
 
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/info.png"))); // NOI18N
         jLabel3.setText("Información");
-        getContentPane().add(jLabel3, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tamaño"));
+
+        jLabel5.setText("# Columnas :");
+
+        jLabel6.setText("# Filas :");
+
+        columnas_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                columnas_ActionPerformed(evt);
+            }
+        });
+
+        generarMatrix_.setText("Crear");
+        generarMatrix_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarMatrix_ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("% Obstaculos: ");
+
+        porce_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                porce_ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(porce_, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                            .addComponent(filas_)
+                            .addComponent(columnas_)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(generarMatrix_)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(columnas_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filas_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(porce_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(generarMatrix_))
+        );
+
+        lienzo1.setPreferredSize(new java.awt.Dimension(400, 400));
+
+        javax.swing.GroupLayout lienzo1Layout = new javax.swing.GroupLayout(lienzo1);
+        lienzo1.setLayout(lienzo1Layout);
+        lienzo1Layout.setHorizontalGroup(
+            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        lienzo1Layout.setVerticalGroup(
+            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
 
         jMenu1.setText("Opciones");
 
@@ -219,6 +362,66 @@ public class Visual extends javax.swing.JFrame implements Runnable {
 
         setJMenuBar(jMenuBar1);
 
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lienzo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(cronometro)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Grupo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(resolverMaloButton)
+                                            .addComponent(jButton3)
+                                            .addComponent(AEstrellaButton))
+                                        .addGap(0, 33, Short.MAX_VALUE))
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Grupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cronometro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AEstrellaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(resolverMaloButton))
+                    .addComponent(lienzo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -229,23 +432,24 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void reiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reiniciarActionPerformed
         // TODO add your handling code here:
         lienzo1.hilo_.stop();
-        lienzo1.restart(0, 0, 0);
+        lienzo1.restart(0,0,0);
         hilo_ = new Thread(this);
         resolverMaloButton.setEnabled(true);
         Resolver.setEnabled(true);
         min_ = 0;
         seg_ = 0;
-        cronometro.setText(min_ + "'   " + seg_ + "''");
-
+        cronometro.setText( min_ + "'   " + seg_ + "''" );
+        
     }//GEN-LAST:event_reiniciarActionPerformed
 
     private void acercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acercaActionPerformed
         // TODO add your handling code here:
+        acercaJF.setVisible(true);
     }//GEN-LAST:event_acercaActionPerformed
 
     private void robotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_robotButtonActionPerformed
         // TODO add your handling code here:
-
+        
     }//GEN-LAST:event_robotButtonActionPerformed
 
     private void resolverMaloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolverMaloButtonActionPerformed
@@ -254,7 +458,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
             lienzo1.hilo_.start();
             resolverMaloButton.setEnabled(false);
             Resolver.setEnabled(false);
-            lienzo1.f_ = 2;
+            lienzo1.f_=2;
             hilo_.start();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "ocurrió un error: " + e.getMessage());
@@ -264,21 +468,21 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void robotButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_robotButtonMouseClicked
         // TODO add your handling code here:
         if (robotButton.isSelected()) {
-            lienzo1.radioButtons_ = 2;
+            lienzo1.radioButtons_=2;
         }
     }//GEN-LAST:event_robotButtonMouseClicked
 
     private void estacionButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estacionButtonMouseClicked
         // TODO add your handling code here:
         if (estacionButton.isSelected()) {
-            lienzo1.radioButtons_ = 3;
+            lienzo1.radioButtons_=3;
         }
     }//GEN-LAST:event_estacionButtonMouseClicked
 
     private void obstaculoButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_obstaculoButtonMouseClicked
         // TODO add your handling code here:
         if (obstaculoButton.isSelected()) {
-            lienzo1.radioButtons_ = 1;
+            lienzo1.radioButtons_=1;
         }
     }//GEN-LAST:event_obstaculoButtonMouseClicked
 
@@ -296,13 +500,23 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
     }//GEN-LAST:event_obstaculoButtonActionPerformed
 
+
+    private void cerrarAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarAboutActionPerformed
+        // TODO add your handling code here:
+        acercaJF.setVisible(false);
+    }//GEN-LAST:event_cerrarAboutActionPerformed
+
+    private void columnas_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_columnas_ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_columnas_ActionPerformed
+
     private void AEstrellaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AEstrellaButtonActionPerformed
         // TODO add your handling code here:
         try {
             lienzo1.hilo_.start();
             AEstrellaButton.setEnabled(false);
             Resolver.setEnabled(false);
-            lienzo1.f_ = 2;
+            lienzo1.f_=2;
             hilo_.start();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "ocurrió un error: " + e.getMessage());
@@ -312,6 +526,25 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void porce_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_porce_ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_porce_ActionPerformed
+
+    private void generarMatrix_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarMatrix_ActionPerformed
+        // TODO add your handling code here:
+        //JTextField f1 = new JTextField("-5");
+        //String text = f1.getText();
+        //int xaxis1 = Integer.parseInt(text);
+        String stringFilas_ = filas_.getText();
+        String stringColumnas_ = columnas_.getText();
+        String stringPorce_ = porce_.getText();
+        int numFilas_ = Integer.parseInt(stringFilas_);
+        int numColumnas_ = Integer.parseInt(stringColumnas_);
+        int numPorce_ = Integer.parseInt(stringPorce_);
+        //lienzo1.ManualMap(numFilas_,numColumnas_,numPorce_);
+    }//GEN-LAST:event_generarMatrix_ActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -353,19 +586,35 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel Grupo;
     private javax.swing.JMenuItem Resolver;
     private javax.swing.JMenuItem acerca;
+    private javax.swing.JFrame acercaJF;
+    private javax.swing.JButton cerrarAbout;
+    private javax.swing.JTextField columnas_;
     private javax.swing.JLabel cronometro;
     private javax.swing.JRadioButton estacionButton;
+    private javax.swing.JTextField filas_;
+    private javax.swing.JButton generarMatrix_;
     private javax.swing.ButtonGroup grupo;
     private javax.swing.JButton jButton3;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private martian.Lienzo lienzo1;
     private javax.swing.JMenuItem mapaAleatorio;
     private javax.swing.JRadioButton obstaculoButton;
+    private javax.swing.JTextField porce_;
     private javax.swing.JMenuItem reiniciar;
     private javax.swing.JButton resolverMaloButton;
     private javax.swing.JRadioButton robotButton;
@@ -374,15 +623,15 @@ public class Visual extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (true) {            
             try {
                 Thread.sleep(999);
                 seg_++;
                 if (seg_ >= 59) {
                     min_++;
-                    seg_ = 0;
+                    seg_=0;
                 }
-                cronometro.setText(min_ + "'   " + seg_ + "''");
+                cronometro.setText(min_ + "'   " + seg_ + "''" );
                 if (lienzo1.isFinished == 1) {
                     hilo_.stop();
                 }
