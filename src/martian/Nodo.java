@@ -14,6 +14,8 @@ public class Nodo {
     int f_; //f=g+h
     int x_,y_;
     boolean definitivo_=false;
+    int fpadre_;
+    int cpadre_;
 
     public Nodo(int f,int c) { //nodo final
         x_=f;
@@ -23,14 +25,25 @@ public class Nodo {
     public Nodo(int f,int c,Nodo n) {
         x_=f;
         y_=c;
-        Costs();
+        Costs(n);
     }
     private void Costs() {  //nodo final no tiene coste
         f_=0;
     }
-    
+    public void set_padre(int f,int c) {
+        fpadre_=f;
+        cpadre_=c;
+    }
+    public int get_fpadre() {
+        return fpadre_;
+    }
+    public int get_cpadre() {
+        return cpadre_;
+    } 
     private void Costs(Nodo n) {
+        System.out.println("martian.Nodo.Costs()"+ n.x_ +n.y_);
         f_=(Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_)+costoLateral_;
+        System.out.println("martian.Nodo.Costs()"+f_);
     }
     public int get_cost() {
         return f_;

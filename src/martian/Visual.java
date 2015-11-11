@@ -151,15 +151,18 @@ public class Visual extends javax.swing.JFrame implements Runnable {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/martian/images/info.png"))); // NOI18N
         jLabel3.setText("Información");
 
+        lienzo1.setAutoscrolls(true);
+        lienzo1.setPreferredSize(new java.awt.Dimension(400, 400));
+
         javax.swing.GroupLayout lienzo1Layout = new javax.swing.GroupLayout(lienzo1);
         lienzo1.setLayout(lienzo1Layout);
         lienzo1Layout.setHorizontalGroup(
             lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 402, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         lienzo1Layout.setVerticalGroup(
             lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 402, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
         jMenu1.setText("Opciones");
@@ -240,7 +243,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                                             .addComponent(resolverMaloButton)
                                             .addComponent(jButton3)
                                             .addComponent(AEstrellaButton))
-                                        .addGap(0, 14, Short.MAX_VALUE)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,7 +272,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
@@ -283,7 +286,7 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void reiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reiniciarActionPerformed
         // TODO add your handling code here:
         lienzo1.hilo_.stop();
-        lienzo1.restart();
+        lienzo1.restart(0,0,0);
         hilo_ = new Thread(this);
         resolverMaloButton.setEnabled(true);
         Resolver.setEnabled(true);
