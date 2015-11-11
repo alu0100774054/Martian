@@ -67,7 +67,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         int c = Integer.parseInt(aux2);
         String aux3 = JOptionPane.showInputDialog(this, "Introducir porcentaje de obstaculos:");
         int porcentaje = Integer.parseInt(aux3);
-        int nObstaculos = (f*c)*(porcentaje/100);
+        int nObstaculos = (f * c) * (porcentaje / 100);
         initComponents();
         restart(0, 0, nObstaculos);
     }
@@ -175,10 +175,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             columnaEntrada_ = 0;
             filaSalida_ = 8;
             columnaSalida_ = 9;
-            altoFilas_=40;
-            anchoColumnas_=40;
-        } 
-        else {
+            altoFilas_ = 40;
+            anchoColumnas_ = 40;
+        } else {
             try {
                 robot_ = ImageIO.read(r_);
                 station_ = ImageIO.read(s_);
@@ -198,15 +197,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             filaSalida_ = 0;
             columnaSalida_ = 1;
             matrix_[filaSalida_][columnaSalida_] = salida_;
-            altoFilas_=400/f;
-            anchoColumnas_=400/c;
+            altoFilas_ = 400 / f;
+            anchoColumnas_ = 400 / c;
             RandomMap(nObstaculos);
         }
 
-        
-        
-        
-        
         listaAbierta = new ArrayList<>();
         listaCerrada = new ArrayList<>();
         //Metemos nodo inicial
@@ -305,9 +300,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                         g.drawImage(station_, j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_, this);
                     } else if (matrix_[i][j] == flag_) {
                         g.setColor(Color.BLUE);
-                        g.fillRect( j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
+                        g.fillRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
                         g.setColor(Color.BLUE);
-                        g.drawRect( j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
+                        g.drawRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
                     }
                 }
             }
@@ -379,7 +374,6 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     private void EvaluarAdyacente(int f, int c, Nodo padre) {
 
-         
         if (checkRoad(f, c)) {
             Nodo adyacente = new Nodo(f, c, nodoFinal);
             adyacente.set_padre(padre.x_, padre.y_);
@@ -389,12 +383,13 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             if (checkListaAbierta(adyacente)) {
                 if (adyacente.get_cost() < padre.get_cost()) {
                     //listaAbierta.add(adyacente);
-                    changePadre(adyacente,padre);
+                    changePadre(adyacente, padre);
                 }
             }
         }
     }
-    private void changePadre (Nodo adyacente, Nodo padre) {
+
+    private void changePadre(Nodo adyacente, Nodo padre) {
         //buscar el padre en la LA y cambiarlo por el adyacente
         for (int i = 0; i < listaCerrada.size(); i++) {
             Nodo aux = listaCerrada.get(i);
@@ -403,6 +398,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             }
         }
     }
+
     public boolean solve() {
         try {
             Thread.sleep(200);
@@ -410,7 +406,8 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
-        while (checkSalida(filaEntrada_, columnaEntrada_)) {
+        while (listaAbierta.size() > 0) {
+            
             Nodo actual = new Nodo(filaEntrada_, columnaEntrada_, nodoFinal);
             //celda de arriba
             EvaluarAdyacente(filaEntrada_ - 1, columnaEntrada_, actual);
@@ -425,7 +422,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             listaCerrada.add(aux);
             filaEntrada_ = aux.x_;
             columnaEntrada_ = aux.y_;
-            
+
             matrix_[aux.x_][aux.y_] = entrada_;
             matrix_[aux.x_][aux.y_] = flag_;
             repaint();
@@ -435,13 +432,13 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         En caso de que LA se encuentre vacía y no seha llegado a la 
         salida del laberinto, entoncesno existe camino posible.
          */
- /*if (filaEntrada_ == filaSalida_ && columnaEntrada_ == columnaSalida_) {
+        if (filaEntrada_ == filaSalida_ && columnaEntrada_ == columnaSalida_) {
             JOptionPane.showMessageDialog(this, "El laberinto tiene solucion");
             exit_ = true;
         } else {
             JOptionPane.showMessageDialog(this, "El laberinto NO tiene solucion");
             exit_ = false;
-        }*/
+        }
         repaint();
         return exit_;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -456,11 +453,10 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                     matrix_[i][j] = entrada_;
                 } else if (i == filaSalida_ && j == columnaSalida_) {
                     matrix_[i][j] = salida_;
-                } else if (nObstaculos > 0 && aux == 1){
-                    matrix_[i][j] = aux; 
+                } else if (nObstaculos > 0 && aux == 1) {
+                    matrix_[i][j] = aux;
                     nObstaculos--;
-                }
-                else {
+                } else {
                     matrix_[i][j] = 0;
                 }
             }
@@ -524,9 +520,8 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     private boolean checkSalida(int f, int c) {
         if (f == filaSalida_ && c == columnaSalida_) {
-                return true; 
-        }
-        else {
+            return true;
+        } else {
             return false;
         }
     }
