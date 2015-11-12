@@ -351,9 +351,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     public boolean checkListaAbierta(Nodo n) {
         for (int i = 0; i < listaAbierta.size()-1; i++) {
             Nodo aux = listaAbierta.get(i);
-            System.out.println("Dentro CkcLA");
+            /*System.out.println("Dentro CkcLA");
             System.out.println("Buscando en LA  "+ n.x_ +"  "+n.y_);
-            System.out.println("Elemento en LA  "+ aux.x_ +"  "+aux.y_);
+            System.out.println("Elemento en LA  "+ aux.x_ +"  "+aux.y_);*/
             //if (aux.get_cost() == n.get_cost() && (aux.x_ == n.x_) && (aux.y_ == n.y_)) {
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
@@ -365,11 +365,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     public boolean checkListaCerrada(Nodo n) {
         for (int i = 0; i < listaCerrada.size()-1; i++) {
             Nodo aux = listaCerrada.get(i);
-            System.out.println("Dentro CkcLC");
+            /*System.out.println("Dentro CkcLC");
             System.out.println("Buscando en LC  "+ n.x_ +"  "+n.y_);
-            System.out.println("Elemento en LC  "+ aux.x_ +"  "+aux.y_);
+            System.out.println("Elemento en LC  "+ aux.x_ +"  "+aux.y_);*/
             //if ((aux.get_cost() == n.get_cost())) {
-            if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
+            if ((aux.x_ == n.x_) && (aux.y_ == n.y_) && (aux.get_cost()==n.get_cost())) {
                 return true;
             }
         }
@@ -435,7 +435,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                     actualizarAbierta(sucesor);
                 }
             }
-            else if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre))) {
+            else if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre)) &&(padre.get_cost()!=sucesor.get_cost())) {
                 listaAbierta.add(sucesor);
                  System.out.println("se mete en la LA el sucesor  " + sucesor.x_+ "  "+sucesor.y_);
             }
@@ -507,7 +507,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         Nodo aux;
         for (int i = 0; i < listaCerrada.size(); i++) {
             aux = listaCerrada.get(i);
-            if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_) {
+            if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_  || aux.get_cost()==nodoAEliminar.get_cost()) {
                 listaCerrada.remove(i);
             }
         }

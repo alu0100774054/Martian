@@ -42,8 +42,8 @@ public class Nodo {
     } 
     private void Costs(Nodo n) {
         System.out.println("martian.Nodo.Costs()"+ n.x_ +n.y_);
-        //f_=(Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_)+costoLateral_;
-        f_=Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_;
+        f_=(Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_)+costoLateral_;
+        //f_=Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_;
         System.out.println("martian.Nodo.Costs()"+f_);
     }
     public int get_cost() {
