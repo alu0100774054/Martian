@@ -54,6 +54,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     URL inf_ = getClass().getResource("images/info.png");
     int f_ = 0, radioButtons_ = 0;
     int flag_ = 5; //paint road step by step
+    int flag2_ = 6;
     boolean exit_ = false;
 
     //para mapa manual
@@ -137,11 +138,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         if (solve()) {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "Solución del algoritmo A*");
-            for (int i =listaCerrada.size()-1; i>=0;i--) {
+            for (int i =listaCerrada.size()-1; i>0;i--) {
             Nodo aux;
             aux = listaCerrada.get(i);
-            System.out.println("Sacando de LC los nodos para pintar " + aux.x_+ "  "+aux.y_);
-            matrix_[aux.x_][aux.y_] = flag_;
+            System.out.println("Sacando de LC los nodos para pintar " + aux.get_fpadre()+ "  "+aux.get_cpadre());
+            matrix_[aux.get_fpadre()][aux.get_cpadre()] = flag2_;
             repaint();
         }
         } else {
@@ -312,7 +313,13 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                         g.fillRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
                         g.setColor(Color.BLUE);
                         g.drawRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
+                    } else if (matrix_[i][j] == flag2_) {
+                        g.setColor(Color.GREEN);
+                        g.fillRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
+                        g.setColor(Color.GREEN);
+                        g.drawRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
                     }
+                    
                 }
             }
         }
@@ -335,8 +342,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
         if (f < 0 || f >= filas_ || c < 0 || c >= columnas_) {
             return false;
-        }
-        if (matrix_[f][c] == flag_ || matrix_[f][c] == 1) {
+        }else if (matrix_[f][c] == flag_ || matrix_[f][c] == 1) {
             return false;
         }
         return true;
@@ -348,6 +354,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             System.out.println("Dentro CkcLA");
             System.out.println("Buscando en LA  "+ n.x_ +"  "+n.y_);
             System.out.println("Elemento en LA  "+ aux.x_ +"  "+aux.y_);
+            //if (aux.get_cost() == n.get_cost() && (aux.x_ == n.x_) && (aux.y_ == n.y_)) {
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
@@ -361,6 +368,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             System.out.println("Dentro CkcLC");
             System.out.println("Buscando en LC  "+ n.x_ +"  "+n.y_);
             System.out.println("Elemento en LC  "+ aux.x_ +"  "+aux.y_);
+            //if ((aux.get_cost() == n.get_cost())) {
             if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
@@ -476,7 +484,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 EvaluarAdyacente(actual.x_ + 1, actual.y_, actual);
                 //celda izquierda
                 EvaluarAdyacente(actual.x_, actual.y_ - 1, actual);
-                //repaint();
+                repaint();
 
             }
         }
