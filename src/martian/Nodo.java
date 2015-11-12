@@ -16,7 +16,8 @@ public class Nodo {
     boolean definitivo_=false;
     int fpadre_;
     int cpadre_;
-
+    Nodo nPadre_;
+    Nodo nSucesor_;
     public Nodo(int f,int c) { //nodo final
         x_=f;
         y_=c;
@@ -40,6 +41,18 @@ public class Nodo {
     public int get_cpadre() {
         return cpadre_;
     } 
+    public void set_nPadre(Nodo n) {
+        nPadre_=n;
+    }
+    public Nodo get_nPadre() {
+        return nPadre_;
+    }
+    public void set_nSucesor(Nodo n) {
+        nSucesor_=n;
+    }
+    public Nodo get_nSucesor() {
+        return nSucesor_;
+    }
     private void Costs(Nodo n) {
         System.out.println("martian.Nodo.Costs()"+ n.x_ +n.y_);
         f_=(Math.abs(n.x_-x_)*costoLateral_+Math.abs(n.y_-y_)*costoLateral_)+costoLateral_;

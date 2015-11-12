@@ -138,13 +138,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         if (solve()) {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "Solución del algoritmo A*");
-            for (int i =listaCerrada.size()-1; i>0;i--) {
-            Nodo aux;
-            aux = listaCerrada.get(i);
-            System.out.println("Sacando de LC los nodos para pintar " + aux.get_fpadre()+ "  "+aux.get_cpadre());
-            matrix_[aux.get_fpadre()][aux.get_cpadre()] = flag2_;
-            repaint();
-        }
+            paintParents(); 
         } else {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "No hay solución del algoritmo A*");
@@ -369,7 +363,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             System.out.println("Buscando en LC  "+ n.x_ +"  "+n.y_);
             System.out.println("Elemento en LC  "+ aux.x_ +"  "+aux.y_);*/
             //if ((aux.get_cost() == n.get_cost())) {
-            if ((aux.x_ == n.x_) && (aux.y_ == n.y_) && (aux.get_cost()==n.get_cost())) {
+            if ((aux.x_ == n.x_) && (aux.y_ == n.y_)) {
                 return true;
             }
         }
@@ -413,9 +407,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         if (checkRoad(f, c)) {
             //JOptionPane.showMessageDialog(this, "se evalua el nodo `["+f+"]["+c+"]");
             Nodo sucesor = new Nodo(f, c, nodoFinal);
+            padre.set_nSucesor(sucesor);
             System.out.println("padre  "+ padre.x_ +"  "+padre.y_);
             System.out.println("sucesor  "+ sucesor.x_ +"  "+sucesor.y_);
             sucesor.set_padre(padre.x_, padre.y_);
+            sucesor.set_nPadre(padre);
             /*Comprobar los casos posibles
              1) adyacente y padre estan en listaCerrada
              2) adyacente y padre estan en listaAbierta
@@ -435,7 +431,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                     actualizarAbierta(sucesor);
                 }
             }
-            else if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre)) &&(padre.get_cost()!=sucesor.get_cost())) {
+            else if ((!checkListaAbierta(sucesor) && !checkListaAbierta(padre)) && (!checkListaCerrada(sucesor) && !checkListaCerrada(padre))) {
                 listaAbierta.add(sucesor);
                  System.out.println("se mete en la LA el sucesor  " + sucesor.x_+ "  "+sucesor.y_);
             }
@@ -507,7 +503,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         Nodo aux;
         for (int i = 0; i < listaCerrada.size(); i++) {
             aux = listaCerrada.get(i);
-            if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_  || aux.get_cost()==nodoAEliminar.get_cost()) {
+            if (aux.x_ == nodoAEliminar.x_ && aux.y_ == nodoAEliminar.y_) {
                 listaCerrada.remove(i);
             }
         }
@@ -602,5 +598,34 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         } else {
             return false;
         }
+    }
+    private void paintParents(){
+        Nodo aux = listaCerrada.get(listaCerrada.size()-1);
+        System.out.println("filaEntrada   " + filaEntrada_+ " Columnaentrada "+columnaEntrada_);
+        Nodo aux2 = aux.get_nPadre();
+        while (aux2.get_nPadre() !=null) {
+            matrix_[aux2.x_][aux2.y_] = flag2_;
+            System.out.println("Padre  " + aux2.x_+ "  "+aux2.y_);
+            if(aux2.get_nPadre() == null){ break;}
+            Nodo aux3 = aux2.get_nPadre();
+            System.out.println("aux3   " + aux3.x_+ "  "+aux3.y_);
+            aux2 = aux3;
+            
+        }
+        repaint();
+    }
+    private void paintSuce(){
+        Nodo aux = listaCerrada.get(0);
+       
+        Nodo aux2 = aux.get_nSucesor();
+        while (aux2.get_fpadre()!=nodoInicial.x_ && aux2.get_cpadre() != nodoInicial.y_) {
+            matrix_[aux2.x_][aux2.y_] = flag2_;
+            System.out.println("Padre  " + aux2.x_+ "  "+aux2.y_);
+            Nodo aux3 = aux2.get_nPadre();
+            System.out.println("aux3   " + aux3.x_+ "  "+aux3.y_);
+            aux2 = aux3;
+            
+        }
+        repaint();
     }
 }
