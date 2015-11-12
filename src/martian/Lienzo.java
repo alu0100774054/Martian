@@ -137,6 +137,13 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         if (solve()) {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "Solución del algoritmo A*");
+            for (int i =listaCerrada.size()-1; i>=0;i--) {
+            Nodo aux;
+            aux = listaCerrada.get(i);
+            System.out.println("Sacando de LC los nodos para pintar " + aux.x_+ "  "+aux.y_);
+            matrix_[aux.x_][aux.y_] = flag_;
+            repaint();
+        }
         } else {
             isFinished = 1;
             JOptionPane.showMessageDialog(this, "No hay solución del algoritmo A*");
@@ -469,14 +476,16 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 EvaluarAdyacente(actual.x_ + 1, actual.y_, actual);
                 //celda izquierda
                 EvaluarAdyacente(actual.x_, actual.y_ - 1, actual);
-                repaint();
+                //repaint();
 
             }
         }
         Nodo aux;
         //imprimir camino solución
         for (int i =listaCerrada.size()-1; i>=0;i--) {
+        
             aux = listaCerrada.get(i);
+            System.out.println("Sacando de LC los nodos para pintar " + aux.x_+ "  "+aux.y_);
             matrix_[aux.x_][aux.y_] = flag_;
             repaint();
         }
