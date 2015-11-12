@@ -38,7 +38,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
 
     //Datos del mapa por defecto
     static int entrada_ = 3, salida_ = 4, filas_ = 10, columnas_ = 10;
-    int filaEntrada_ = 3, columnaEntrada_ = 0, filaSalida_ = 8, columnaSalida_ = 9;
+    int filaEntrada_, columnaEntrada_, filaSalida_, columnaSalida_;
 
     int x_ = 0, y_ = 0, isFinished = 0;
     //objetos gráficos
@@ -54,7 +54,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
     URL inf_ = getClass().getResource("images/info.png");
     int f_ = 0, radioButtons_ = 0;
     int flag_ = 5; //paint road step by step
+
     int flag2_ = 6;
+
+    int flagSolucion_ = 6;
+
     boolean exit_ = false;
 
     //para mapa manual
@@ -67,11 +71,11 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         int f = Integer.parseInt(aux1);
         String aux2 = JOptionPane.showInputDialog(this, "Introducir numero de columnas:");
         int c = Integer.parseInt(aux2);
-        String aux3 = JOptionPane.showInputDialog(this, "Introducir porcentaje de obstaculos:");
-        int porcentaje = Integer.parseInt(aux3);
-        int nObstaculos = (f * c) * (porcentaje / 100);
+        //String aux3 = JOptionPane.showInputDialog(this, "Introducir porcentaje de obstaculos:");
+        //int porcentaje = Integer.parseInt(aux3);
+        //int nObstaculos = (f * c) * (porcentaje / 100);
         initComponents();
-        restart(0, 0, nObstaculos);
+        restart(f, c);
     }
 
     /**
@@ -108,6 +112,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         // TODO add your handling code here:
         x_ = evt.getX() / anchoColumnas_;
         y_ = evt.getY() / altoFilas_;
+        //matrix_[y_][x_] != entrada_ && matrix_[y_][x_] != salida_ &&
         if (matrix_[y_][x_] != entrada_ && matrix_[y_][x_] != salida_ && f_ == 1) {
             if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 1) {
                 matrix_[y_][x_] = 1;
@@ -115,17 +120,25 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 matrix_[y_][x_] = 0;
             } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 2) {
                 matrix_[filaEntrada_][columnaEntrada_] = 0;
-                matrix_[y_][x_] = entrada_;
-                filaEntrada_ = y_;
-                columnaEntrada_ = x_;
+                filaEntrada_=y_;
+                nodoInicial.x_=filaEntrada_;
+                columnaEntrada_=x_;
+                nodoInicial.y_=columnaEntrada_;
+                matrix_[filaEntrada_][columnaEntrada_] = entrada_;
+                
             } else if (evt.getButton() == evt.BUTTON1 && radioButtons_ == 3) {
+                //JOptionPane.showMessageDialog(this, "cambiando estacion de "+filaSalida_+ "-"+columnaSalida_+"a "+ y_+ x_);
                 matrix_[filaSalida_][columnaSalida_] = 0;
-                matrix_[y_][x_] = salida_;
-                filaSalida_ = y_;
-                columnaSalida_ = x_;
+                filaSalida_=y_;
+                nodoFinal.x_=filaSalida_;
+                columnaSalida_=x_;
+                nodoFinal.y_=columnaSalida_;
+                matrix_[filaSalida_][columnaSalida_] = salida_;
+                //JOptionPane.showMessageDialog(this, "cambiando salida en matrix a "+filaSalida_+ "-"+columnaSalida_);
             }
             repaint();
         }
+        repaint();
     }//GEN-LAST:event_formMouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
@@ -145,12 +158,12 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         }
     }
 
-    public void restart(int f, int c, int nObstaculos) {
+    public void restart(int f, int c) {
         hilo_ = new Thread(this);
         f_ = 1;
         isFinished = 0;
         exit_ = false;
-        if (f == 0 && c == 0) {
+        /*if (f == 0 && c == 0) {
             int[][] sampleMap = {
                 {0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
                 {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -180,7 +193,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             columnaSalida_ = 9;
             altoFilas_ = 40;
             anchoColumnas_ = 40;
-        } else {
+        } else {*/
             try {
                 robot_ = ImageIO.read(r_);
                 station_ = ImageIO.read(s_);
@@ -192,6 +205,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "No se cargo imagen, ERROR:" + e.getMessage());
             }
+            radioButtons_=1;
             matrix_ = new int[f][c];
             //ponemos una entrada y salida por defecto
             filaEntrada_ = 0;
@@ -202,8 +216,8 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             matrix_[filaSalida_][columnaSalida_] = salida_;
             altoFilas_ = 400 / f;
             anchoColumnas_ = 400 / c;
-            RandomMap(nObstaculos);
-        }
+            RandomMap();
+        //}
 
         listaAbierta = new ArrayList<>();
         listaCerrada = new ArrayList<>();
@@ -211,7 +225,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         //Metemos nodo inicial
         nodoFinal = new Nodo(filaSalida_, columnaSalida_);
         nodoInicial = new Nodo(filaEntrada_, columnaEntrada_, nodoFinal);
-        listaAbierta.add(nodoInicial);
+        //listaAbierta.add(nodoInicial);
 
         repaint();
     }
@@ -294,7 +308,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             for (int i = 0; i < matrix_.length; i++) {
                 for (int j = 0; j < matrix_.length; j++) {
                     g.setColor(Color.BLACK);
-                    if (matrix_[i][j] == 0 || matrix_[i][j] == filaSalida_) { //*
+                    if (matrix_[i][j] == 0) { //*
                         g.drawImage(background_, j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_, this);
                     } else if (matrix_[i][j] == 1) {
                         g.drawImage(obstacle_, j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_, this);
@@ -303,9 +317,14 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                     } else if (matrix_[i][j] == salida_) {
                         g.drawImage(station_, j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_, this);
                     } else if (matrix_[i][j] == flag_) {
-                        g.setColor(Color.BLUE);
+                        g.setColor(Color.RED);
                         g.fillRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
-                        g.setColor(Color.BLUE);
+                        g.setColor(Color.RED);
+                        g.drawRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
+                    } else if (matrix_[i][j] == flagSolucion_) {
+                        g.setColor(Color.GREEN);
+                        g.fillRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
+                        g.setColor(Color.GREEN);
                         g.drawRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
                     } else if (matrix_[i][j] == flag2_) {
                         g.setColor(Color.GREEN);
@@ -313,8 +332,9 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                         g.setColor(Color.GREEN);
                         g.drawRect(j * anchoColumnas_, i * altoFilas_, altoFilas_, anchoColumnas_);
                     }
-                    
-                }
+
+                } 
+
             }
         }
         //super.paint(g); //To change body of generated methods, choose Tools | Templates.
@@ -456,6 +476,7 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
         boolean solucionE_ = false, fallo_ = false;
+        listaAbierta.add(nodoInicial);
         while (solucionE_ != true) {
             if (listaAbierta.isEmpty()) {
 
@@ -489,8 +510,10 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
         for (int i =listaCerrada.size()-1; i>=0;i--) {
         
             aux = listaCerrada.get(i);
+
             System.out.println("Sacando de LC los nodos para pintar " + aux.x_+ "  "+aux.y_);
             matrix_[aux.x_][aux.y_] = flag_;
+
             repaint();
         }
 
@@ -517,79 +540,6 @@ public class Lienzo extends javax.swing.JPanel implements Runnable {
                 listaAbierta.remove(i);
             }
         }
-    }
-
-    private void RandomMap(int nObstaculos) {
-        for (int i = 0; i < matrix_.length; i++) {
-            for (int j = 0; j < matrix_.length; j++) {
-                int aux = (int) (Math.random() * 1.99);
-                if (i == filaEntrada_ && j == columnaEntrada_) {
-                    matrix_[i][j] = entrada_;
-                } else if (i == filaSalida_ && j == columnaSalida_) {
-                    matrix_[i][j] = salida_;
-                } else if (nObstaculos > 0 && aux == 1) {
-                    matrix_[i][j] = aux;
-                    nObstaculos--;
-                } else {
-                    matrix_[i][j] = 0;
-                }
-            }
-        }
-
-        //Generate Random road
-        int k = filaEntrada_, l = columnaEntrada_;
-        if (filaEntrada_ < filaSalida_ && columnaEntrada_ < columnaSalida_) {
-
-            while (k < filaSalida_ || l < columnaSalida_) {
-                int road = (int) (Math.random() * 1.99);
-                if (road == 0 && l < columnaSalida_) {
-                    matrix_[k][++l] = 0;
-                } else if (k < filaSalida_) {
-                    matrix_[++k][l] = 0;
-                } else {
-                    matrix_[k][++l] = 0;
-                }
-            }
-        } else if (filaEntrada_ < filaSalida_ && columnaEntrada_ > columnaSalida_) {
-
-            while (k < filaSalida_ || l > columnaSalida_) {
-                int road = (int) (Math.random() * 1.99);
-                if (road == 0 && l > columnaSalida_) {
-                    matrix_[k][--l] = 0;
-                } else if (k < filaSalida_) {
-                    matrix_[++k][l] = 0;
-                } else {
-                    matrix_[k][--l] = 0;
-                }
-            }
-        } else if (filaEntrada_ > filaSalida_ && columnaEntrada_ < columnaSalida_) {
-
-            while (k > filaSalida_ || l < columnaSalida_) {
-                int road = (int) (Math.random() * 1.99);
-                if (road == 0 && l < columnaSalida_) {
-                    matrix_[k][++l] = 0;
-                } else if (k > filaSalida_) {
-                    matrix_[--k][l] = 0;
-                } else {
-                    matrix_[k][++l] = 0;
-                }
-            }
-
-        } else if (filaEntrada_ > filaSalida_ && columnaEntrada_ > columnaSalida_) {
-
-            while (k > filaSalida_ || l > columnaSalida_) {
-                int road = (int) (Math.random() * 1.99);
-                if (road == 0 && l > columnaSalida_) {
-                    matrix_[k][--l] = 0;
-                } else if (k > filaSalida_) {
-                    matrix_[--k][l] = 0;
-                } else {
-                    matrix_[k][--l] = 0;
-                }
-            }
-        }
-        matrix_[filaSalida_][columnaSalida_] = salida_;
-        repaint();
     }
 
     private boolean checkSalida(int f, int c) {

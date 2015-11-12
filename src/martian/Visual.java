@@ -432,9 +432,16 @@ public class Visual extends javax.swing.JFrame implements Runnable {
     private void reiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reiniciarActionPerformed
         // TODO add your handling code here:
         lienzo1.hilo_.stop();
-        lienzo1.restart(0,0,0);
+        //JOptionPane.showMessageDialog(this, "si desea cargar mapa por defecto introduzca numero de filas y columnas a cero");
+        String aux1 = JOptionPane.showInputDialog(this, "Introducir numero de filas:");
+        int f = Integer.parseInt(aux1);
+        String aux2 = JOptionPane.showInputDialog(this, "Introducir numero de columnas:");
+        int c = Integer.parseInt(aux2);
+        lienzo1.restart(f,c);
         hilo_ = new Thread(this);
+        //lienzo1.hilo_.start();
         resolverMaloButton.setEnabled(true);
+        AEstrellaButton.setEnabled(true);
         Resolver.setEnabled(true);
         min_ = 0;
         seg_ = 0;
